@@ -1,4 +1,4 @@
-package drawing;
+/*package drawing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -39,9 +39,7 @@ public class FrmDrawing extends JFrame {
 
 	private JToggleButton tglbtnSelect = new JToggleButton("Select");
 
-	/**
-	 * Launch the application.
-	 */
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -55,9 +53,7 @@ public class FrmDrawing extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+	
 	public FrmDrawing() {
 
 		setTitle("Sandra Melovic IT43/2019");
@@ -318,3 +314,4 @@ public class FrmDrawing extends JFrame {
 	}
 
 }
+*/

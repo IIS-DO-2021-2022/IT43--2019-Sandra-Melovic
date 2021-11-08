@@ -1,4 +1,4 @@
-package drawing;
+/*package drawing;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -29,9 +29,7 @@ public class PnlDrawing extends JPanel {
 	private Point startPoint;
 	private Shape selectedShape;
 
-	/**
-	 * Create the panel.
-	 */
+	
 
 	public PnlDrawing() {
 
@@ -165,3 +163,4 @@ public class PnlDrawing extends JPanel {
 	}
 
 }
+*/
