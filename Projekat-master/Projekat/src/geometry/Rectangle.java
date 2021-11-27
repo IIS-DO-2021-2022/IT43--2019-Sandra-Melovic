@@ -25,6 +25,12 @@ public class Rectangle extends SurfaceShape{
 		this.selected=selected;
 	}
 	
+	public Rectangle(Point upperLeft, int width, int height, Color color, Color innerColor) {
+		this(upperLeft,width,height);
+		setColor(color);
+		setColor(innerColor);
+	}
+	
 	public Rectangle(Point upperLeft, int height, int width, boolean selected, Color color) {
 		this(upperLeft, height, width, selected);
 		setColor(color);

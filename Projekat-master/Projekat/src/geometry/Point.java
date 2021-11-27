@@ -24,6 +24,10 @@ public class Point extends Shape{
 		this.selected=selected;
 	}
 	
+	public Point(int x, int y, Color color) {
+		this(x, y);
+		setColor(color);
+	}
 	
 	public Point(int x, int y, boolean selected, Color color) {
 		this(x, y, selected);
