@@ -1,6 +1,4 @@
-/geometry/
-/drawing/
-/singleton/
 /mvc/
-/command.class
 /command/
+/geometry/
+/adapter/

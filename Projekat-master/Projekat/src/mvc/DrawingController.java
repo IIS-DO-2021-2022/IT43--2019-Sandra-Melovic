@@ -6,8 +6,10 @@ import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 
+import adapter.HexagonAdapter;
 import command.AddCircleCmd;
 import command.AddDonutCmd;
+import command.AddHexagonCmd;
 import command.AddLineCmd;
 import command.AddPointCmd;
 import command.AddRectangleCmd;
@@ -15,11 +17,13 @@ import command.RemoveShapeCmd;
 import command.SelectCmd;
 import command.UpdateCircleCmd;
 import command.UpdateDonutCmd;
+import command.UpdateHexagonCmd;
 import command.UpdateLineCmd;
 import command.UpdatePointCmd;
 import command.UpdateRectangleCmd;
 import geometry.Circle;
 import geometry.Donut;
+import geometry.Hexagon;
 import geometry.Line;
 import geometry.Point;
 import geometry.Rectangle;
@@ -64,7 +68,7 @@ public class DrawingController {
 	protected void modify() {
 
 		Shape selectedShape = model.getSelectedShape();
-		System.out.println(selectedShape);
+		//System.out.println(selectedShape);
 		if (selectedShape != null) {
 
 			if (selectedShape instanceof Point) {
@@ -334,6 +338,59 @@ public class DrawingController {
 				
 				}
 					
+			} else if (selectedShape instanceof HexagonAdapter) {
+
+
+				HexagonAdapter oldState = (HexagonAdapter) selectedShape;
+				DlgHexagon dialog = new DlgHexagon();
+				System.out.println("staro stanje" + oldState);
+				dialog.getTxtX().setText("" + Integer.toString(oldState.getHexagon().getX()));
+				dialog.getTxtY().setText("" + Integer.toString(oldState.getHexagon().getY()));
+				dialog.getTxtR().setText("" + Integer.toString(oldState.getHexagon().getR()));
+				//dialog.getBtnInnerColor().setBackground(oldState.getInnerColor());
+				//dialog.getBtnOutlineColor().setBackground(oldState.getColor());
+
+				dialog.setVisible(true);
+				
+				System.out.println("staro stanje2" + oldState);
+				if (dialog.isConfirm()) {
+					System.out.println("staro stanje u ifu" + oldState);
+					if (dialog.getTxtX().getText().trim().isEmpty() || dialog.getTxtY().getText().trim().isEmpty()
+							|| dialog.getTxtR().getText().trim().isEmpty()) {
+						
+						JOptionPane.showMessageDialog(null, "All fields are required!", "ERROR",
+								JOptionPane.ERROR_MESSAGE);
+					} else {	System.out.println("staro stanje3" + oldState);
+						try {
+							if (Integer.parseInt(dialog.getTxtR().getText().toString()) <= 0
+									|| Integer.parseInt(dialog.getTxtX().getText().toString()) < 0
+									|| Integer.parseInt(dialog.getTxtY().getText().toString()) < 0) {
+								JOptionPane.showMessageDialog(null, "Insert values greather than 0!", "ERROR",
+										JOptionPane.ERROR_MESSAGE);
+							} else {	System.out.println("staro stanje4" + oldState);
+								HexagonAdapter newState = new HexagonAdapter(new Hexagon(
+
+										Integer.parseInt(dialog.getTxtX().getText()),
+												Integer.parseInt(dialog.getTxtY().getText()),
+										Integer.parseInt(dialog.getTxtR().getText())));
+								System.out.println("novo stanje" + newState);
+								UpdateHexagonCmd updateHexagonCmd = new UpdateHexagonCmd(oldState, newState);
+								updateHexagonCmd.execute();
+								model.pushToUndoStack(updateHexagonCmd);
+								frame.repaint();
+
+
+							}
+						} catch (Exception e2) {
+							JOptionPane.showMessageDialog(null, "Enter numbers only", "Error",
+									JOptionPane.ERROR_MESSAGE);
+						}
+						
+					}
+				
+				}	System.out.println("nakon" + oldState);
+
+			
 			}
 
 		}
@@ -485,6 +542,39 @@ public class DrawingController {
 		return null;
 		
 	}
+	
+	protected HexagonAdapter drawHexagon(MouseEvent e, DlgHexagon dialog) {
+		if (dialog.isConfirm()) {
+
+			if  (dialog.getTxtR().getText().trim().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "All fields are required!", "ERROR",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				try {
+					if (Integer.parseInt(dialog.getTxtR().getText().toString()) <= 0) {
+						JOptionPane.showMessageDialog(null, "Insert values greather than 0!", "ERROR",
+								JOptionPane.ERROR_MESSAGE);
+					} else {
+						HexagonAdapter hexagon = new HexagonAdapter( new Hexagon(e.getX(), e.getY(),
+													Integer.parseInt(dialog.getTxtR().getText().toString())));
+						AddHexagonCmd addHexagonCmd = new AddHexagonCmd(hexagon,model);
+						addHexagonCmd.execute();
+						model.pushToUndoStack(addHexagonCmd);	
+						
+						return hexagon;
+						
+					}
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Enter numbers only", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+
+			}
+			return null;
+		
+	}
 
 	
 	protected void thisMouseClicked(MouseEvent me) {
@@ -565,6 +655,18 @@ public class DrawingController {
 				//System.out.println(dialog.getRect());
 				
 			
+		}else if (frame.getTglbtnHexagon().isSelected()) {
+			
+			DlgHexagon dialog = new DlgHexagon();
+			dialog.setModal(true);
+			dialog.getTxtX().setText("" + Integer.toString(click.getX()));
+			dialog.getTxtX().setEditable(false);
+			dialog.getTxtY().setText("" + Integer.toString(click.getY()));
+			dialog.getTxtY().setEditable(false);
+			dialog.setVisible(true);
+
+			newShape = drawHexagon(me, dialog);
+			
 		}
 
 		if (newShape != null) {
@@ -595,8 +697,26 @@ public class DrawingController {
 		
 	}
 	
-	
-	
+	private void selectShape(MouseEvent e) {
+		for(int i = 0; i<model.getShapes().size(); i++)
+		{
+			if(model.getShapes().get(i).contains(e.getX(), e.getY()))
+			{
+				Shape shape = model.getShapes().get(i);
+				SelectCmd selectCmd = new SelectCmd(model, shape);
+				selectCmd.execute();
+				model.getUndoStack().push(selectCmd);
+			}
+		}
+	} 
+	private void stateChecker(MouseEvent e) throws Exception {
+		
+		if(frame.getState() == 7)           
+		{
+			selectShape(e);
+		}
+		
+	}
 	
 	
 	public Color getOutColor() {

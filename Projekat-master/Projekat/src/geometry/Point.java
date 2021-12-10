@@ -110,7 +110,15 @@ public class Point extends Shape{
 	public void setY(int y) {
 		this.y=y;	
 	}
-
+	
+	@Override
+	public Point clone() {
+			Point point = new Point();
+			point.setX(this.getX()); 
+			point.setY(this.getY());
+			point.setColor(this.getColor());
+			return point;
+		}
 	
 
 	

@@ -26,6 +26,7 @@ public class DrawingFrame extends JFrame{
 	private JToggleButton tglbtnCircle = new JToggleButton("Circle");
 	private JToggleButton tglbtnDonut = new JToggleButton("Donut");
 	private JToggleButton tglbtnSelect = new JToggleButton("Select");
+	private JToggleButton tglbtnHexagon = new JToggleButton("Hexagon");
 	private JButton btnUndo;
 	private JButton btnRedo;
 	private int mainState = 0;
@@ -81,6 +82,11 @@ public class DrawingFrame extends JFrame{
 		tglbtnRectangle.setForeground(Color.BLACK);
 		
 		pnlNorth.add(tglbtnRectangle);
+		
+		tglbtnHexagon.setBackground(Color.PINK);
+		tglbtnHexagon.setForeground(Color.BLACK);
+		
+		pnlNorth.add(tglbtnHexagon);
 
 		ButtonGroup btnGroup = new ButtonGroup();
 
@@ -89,11 +95,18 @@ public class DrawingFrame extends JFrame{
 		btnGroup.add(tglbtnCircle);
 		btnGroup.add(tglbtnDonut);
 		btnGroup.add(tglbtnRectangle);
+		btnGroup.add(tglbtnHexagon);
 
 		JPanel pnlSouth = new JPanel();
 		contentPane.add(pnlSouth, BorderLayout.SOUTH);
 		pnlSouth.setBackground(Color.BLACK);
 		tglbtnSelect.setBackground(Color.PINK);
+		tglbtnSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setState(7);
+				view.repaint();
+			}
+		});
 		pnlSouth.add(tglbtnSelect);
 
 		JButton btnModify = new JButton("Modify");
@@ -103,8 +116,7 @@ public class DrawingFrame extends JFrame{
 
 				if (view.getModel().getSelectedShape() != null) {
 					controller.modify();
-					view.getModel().getSelectedShape().setSelected(false);
-
+					
 				} else {
 					JOptionPane.showMessageDialog(null, "Please, select what you want to modify!", "Error",
 							JOptionPane.ERROR_MESSAGE);
@@ -241,6 +253,14 @@ public class DrawingFrame extends JFrame{
 	
 	public void setState(int state) {
 		this.mainState = state;
+	}
+
+	public JToggleButton getTglbtnHexagon() {
+		return tglbtnHexagon;
+	}
+
+	public void setTglbtnHexagon(JToggleButton tglbtnHexagon) {
+		this.tglbtnHexagon = tglbtnHexagon;
 	}
 	
 

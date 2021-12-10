@@ -9,20 +9,21 @@ public class UpdateRectangleCmd implements Command {
 
 	private Rectangle oldState;
 	private Rectangle newState;
-	private Rectangle original= new Rectangle(new Point(445,24), 45, 65,Color.BLACK,Color.BLACK );
+	private Rectangle original;
 	
 	public UpdateRectangleCmd(Rectangle oldState, Rectangle newState) {
 		this.oldState=oldState;
 		this.newState=newState;
+		original=(Rectangle)oldState.clone();
 	}
 	
 
 	@Override
 	public void execute() {
-		original.getUpperLeft().setX(oldState.getUpperLeft().getX());
+		/*original.getUpperLeft().setX(oldState.getUpperLeft().getX());
 		original.getUpperLeft().setY(oldState.getUpperLeft().getY());
 		original.setHeight(oldState.getHeight());
-		original.setWidth(oldState.getWidth());
+		original.setWidth(oldState.getWidth());*/
 		
 		oldState.getUpperLeft().setX(newState.getUpperLeft().getX());
 		oldState.getUpperLeft().setY(newState.getUpperLeft().getY());

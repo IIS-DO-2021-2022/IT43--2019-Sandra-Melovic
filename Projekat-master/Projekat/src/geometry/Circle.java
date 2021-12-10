@@ -128,6 +128,21 @@ public class Circle extends SurfaceShape{
 		}
 		
 	}
+	
+	public Circle clone() {
+		Circle circle = new Circle();
+		circle.setCenter(this.getCenter());
+		try {
+			circle.setR(this.getR());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		circle.setInnerColor(this.getInnerColor());
+		circle.setColor(this.getColor());
+		return circle;
+	}
+
 
 	
 	

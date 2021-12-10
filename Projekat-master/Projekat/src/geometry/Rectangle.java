@@ -139,7 +139,17 @@ public class Rectangle extends SurfaceShape{
 	public void setHeight(int height) {
 		this.height=height;
 	}
-
+	@Override
+	public Rectangle clone() {
+		Rectangle rectangle = new Rectangle(new Point(), height, width, getColor(), getInnerColor());
+		rectangle.getUpperLeft().setX(this.getUpperLeft().getX());
+		rectangle.getUpperLeft().setY(this.getUpperLeft().getY());
+		rectangle.setHeight(this.getHeight());
+		rectangle.setWidth(this.getWidth());
+		rectangle.setColor(this.getColor());
+		rectangle.setInnerColor(this.getInnerColor());
+		return rectangle;
+	}
 	
 
 	

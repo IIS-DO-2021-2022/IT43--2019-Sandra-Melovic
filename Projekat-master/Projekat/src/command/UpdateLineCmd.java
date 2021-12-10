@@ -9,22 +9,24 @@ public class UpdateLineCmd implements Command {
 
 	private Line oldState;
 	private Line newState;
-	private Line original= new Line(new Point(152, 151), new Point(54, 47), Color.BLACK);
+	private Line original;
 	
 	
 	public UpdateLineCmd(Line oldState, Line newState) {
 		this.oldState=oldState;
 		this.newState=newState;
+		 original= (Line) oldState.clone();
 	}
 
 	@Override
 	public void execute() {
-		System.out.println(original);
+		
+		/*System.out.println(original);
 		original.getStartPoint().setX(oldState.getStartPoint().getX());
 		original.getStartPoint().setY(oldState.getStartPoint().getY());
 		original.getEndPoint().setX(oldState.getEndPoint().getX());
 		original.getEndPoint().setY(oldState.getEndPoint().getY());
-		original.setColor(oldState.getColor());
+		original.setColor(oldState.getColor());*/
 		
 		oldState.getStartPoint().setX(newState.getStartPoint().getX());;
 		oldState.getStartPoint().setY(newState.getStartPoint().getY());

@@ -7,23 +7,24 @@ public class UpdateCircleCmd implements Command {
 
 	private Circle oldState;
 	private Circle newState;
-	private Circle original= new Circle(new Point(14, 55), 10);
+	private Circle original;
 	
 	
 	public UpdateCircleCmd(Circle oldState, Circle newState) {
 		this.oldState=oldState;
 		this.newState=newState;
+		original=(Circle)oldState.clone();
 	}
 
 	@Override
 	public void execute()  {
-		original.getCenter().setX(oldState.getCenter().getX());
+		/*original.getCenter().setX(oldState.getCenter().getX());
 		original.getCenter().setY(oldState.getCenter().getY());
 		try {
 			original.setR(oldState.getR());
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		oldState.getCenter().setX(newState.getCenter().getX());
 		oldState.getCenter().setY(newState.getCenter().getY());

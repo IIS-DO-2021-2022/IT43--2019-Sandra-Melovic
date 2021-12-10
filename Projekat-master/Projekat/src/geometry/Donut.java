@@ -98,4 +98,24 @@ public class Donut extends Circle {
 		}
 		
 	}
+	@Override
+	public Donut clone(){
+		Donut donut = new Donut();
+		donut.setCenter(this.getCenter());
+		try {
+			donut.setR(this.getR());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			donut.setInnerRadius(this.getInnerR());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		donut.setInnerColor(this.getInnerColor());
+		donut.setColor(this.getColor());
+		return donut;
+	}
 }

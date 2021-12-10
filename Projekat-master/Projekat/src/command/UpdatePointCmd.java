@@ -6,19 +6,20 @@ public class UpdatePointCmd implements Command {
 	
 	private Point oldState;
 	private Point newState;
-	private Point original= new Point();
+	private Point original;
 	
 	public UpdatePointCmd(Point oldState, Point newState) {
 		this.oldState=oldState;
 		this.newState=newState;
-	}
+		original = (Point) oldState.clone();
+		}
 
 
 	@Override
 	public void execute() {
-		original.setX(oldState.getX());
+		/*original.setX(oldState.getX());
 		original.setY(oldState.getY());
-		original.setColor(oldState.getColor());
+		original.setColor(oldState.getColor());*/
 		
 		oldState.setX(newState.getX());
 		oldState.setY(newState.getY());
