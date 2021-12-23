@@ -31,6 +31,7 @@ public class Line extends Shape{
 	public Line(Point startPoint, Point endPoint, boolean selected, Color color) {
 		this(startPoint, endPoint, selected);
 		setColor(color);
+		setSelected(selected);
 	}
 
 	public double length() {

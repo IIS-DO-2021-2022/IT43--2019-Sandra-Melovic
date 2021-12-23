@@ -18,7 +18,7 @@ import geometry.Shape;
 public class DrawingModel {
 	
 	public List<Shape> shapes = new ArrayList<Shape>();
-	private List<Shape> selectedShapes = new ArrayList<Shape>();
+	private ArrayList<Shape> selectedShapes = new ArrayList<Shape>();
 	public Point startPoint;
 	public Shape selectedShape;
 	private Stack<Command> undoStack = new Stack<>();
@@ -118,9 +118,7 @@ public class DrawingModel {
 		return selectedShapes;
 	}
 
-	public void setSelectedShapes(List<Shape> selectedShapes) {
-		this.selectedShapes = selectedShapes;
-	}
+
 	
 
 

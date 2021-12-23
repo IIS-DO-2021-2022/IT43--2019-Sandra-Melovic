@@ -39,6 +39,7 @@ public class Rectangle extends SurfaceShape{
 	public Rectangle(Point upperLeft, int height, int width, boolean selected, Color color, Color innerColor) {
 		this(upperLeft, height, width, selected, color);
 		setInnerColor(innerColor);
+		setSelected(selected);
 	}
 	
 

@@ -17,6 +17,7 @@ public class RemoveShapeCmd implements Command{
 	public void execute() {
 		model.remove(shape);
 		model.getSelectedShapes().remove(shape);
+		System.out.println("obrisano");
 	}
 
 	@Override

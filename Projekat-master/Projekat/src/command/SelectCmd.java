@@ -15,8 +15,10 @@ public class SelectCmd implements Command{
 	
 	@Override
 	public void execute() {
+		System.out.println("selektuj");
 		shape.setSelected(true);
-		model.addSelectedShape(shape);
+		System.out.println(shape.isSelected());
+		model.getSelectedShapes().add(shape);
 		
 	}
 

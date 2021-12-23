@@ -15,6 +15,7 @@ public class AddPointCmd implements Command {
 
 	@Override
 	public void execute() {
+		System.out.println("execute . . .");
 		model.add(point);
 	}
 

@@ -29,6 +29,8 @@ public class DrawingFrame extends JFrame{
 	private JToggleButton tglbtnHexagon = new JToggleButton("Hexagon");
 	private JButton btnUndo;
 	private JButton btnRedo;
+	private JButton btnDelete;
+	private JButton btnModify;
 	private int mainState = 0;
 
 	public DrawingFrame() {
@@ -109,12 +111,13 @@ public class DrawingFrame extends JFrame{
 		});
 		pnlSouth.add(tglbtnSelect);
 
-		JButton btnModify = new JButton("Modify");
+		btnModify = new JButton("Modify");
 		btnModify.setBackground(Color.PINK);
+		btnModify.setEnabled(false);
 		btnModify.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (view.getModel().getSelectedShape() != null) {
+				if (view.getModel().getSelectedShapes().get(0) != null) {
 					controller.modify();
 					
 				} else {
@@ -130,8 +133,9 @@ public class DrawingFrame extends JFrame{
 		pnlSouth.add(btnModify);
 		btnGroup.add(btnModify);
 
-		JButton btnDelete = new JButton("Delete");
+		btnDelete = new JButton("Delete");
 		btnDelete.setBackground(Color.PINK);
+		btnDelete.setEnabled(false);
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.delete();
@@ -141,21 +145,25 @@ public class DrawingFrame extends JFrame{
 		pnlSouth.add(btnDelete);
 		btnGroup.add(btnDelete);
 		
-		JButton btnUndo = new JButton("Undo");
+		btnUndo = new JButton("Undo");
+		btnUndo.setEnabled(false);
 		btnUndo.setBackground(Color.PINK);
 		btnUndo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.undo();
+				btnRedo.setEnabled(true);
 			}
 		});
 		pnlSouth.add(btnUndo);
 		btnGroup.add(btnUndo);
 		
-		JButton btnRedo = new JButton("Redo");
+		btnRedo = new JButton("Redo");
+		btnRedo.setEnabled(false);
 		btnRedo.setBackground(Color.PINK);
 		btnRedo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.redo();
+				btnUndo.setEnabled(true);
 			}
 		});
 		pnlSouth.add(btnRedo);
@@ -263,6 +271,13 @@ public class DrawingFrame extends JFrame{
 		this.tglbtnHexagon = tglbtnHexagon;
 	}
 	
+	public JButton getBtnDelete() {
+		return btnDelete;
+	}
+	
+	public JButton getBtnModify() {
+		return btnModify;
+	}
 
 
 }

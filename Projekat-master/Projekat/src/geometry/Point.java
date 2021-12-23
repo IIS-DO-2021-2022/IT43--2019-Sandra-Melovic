@@ -32,6 +32,7 @@ public class Point extends Shape{
 	public Point(int x, int y, boolean selected, Color color) {
 		this(x, y, selected);
 		setColor(color);
+		setSelected(selected);
 	}
 
 	
@@ -64,7 +65,7 @@ public class Point extends Shape{
 		g.drawLine(x - 2, y, x + 2, y);
 		g.drawLine(x, y + 2, x, y - 2);
 		
-		if (selected) {
+		if (isSelected()) {
 			g.setColor(Color.BLUE);
 			g.drawRect(x-2, y-2, 4, 4);			
 		}
@@ -109,6 +110,13 @@ public class Point extends Shape{
 	
 	public void setY(int y) {
 		this.y=y;	
+	}
+	
+	public void setSelected(boolean selected) {
+		this.selected=selected;	
+	}
+	public boolean isSelected() {
+		return selected;	
 	}
 	
 	@Override

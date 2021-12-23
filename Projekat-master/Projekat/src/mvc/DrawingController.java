@@ -3,6 +3,7 @@ package mvc;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 import javax.swing.JOptionPane;
 
@@ -13,6 +14,7 @@ import command.AddHexagonCmd;
 import command.AddLineCmd;
 import command.AddPointCmd;
 import command.AddRectangleCmd;
+import command.DeselectCmd;
 import command.RemoveShapeCmd;
 import command.SelectCmd;
 import command.UpdateCircleCmd;
@@ -28,6 +30,8 @@ import geometry.Line;
 import geometry.Point;
 import geometry.Rectangle;
 import geometry.Shape;
+import observer.ButtonObserver;
+import observer.ButtonObserverUpdate;
 
 public class DrawingController {
 	
@@ -36,30 +40,42 @@ public class DrawingController {
 	private Color outColor = Color.BLACK;
 	private Color inColor = Color.BLACK;
 	
+	
+	private ButtonObserver btnObserver = new ButtonObserver();
+	private ButtonObserverUpdate btnObserverUpdate;
+	
 	public DrawingController(DrawingModel model, DrawingFrame frame) {
 		this.model = model;
 		this.frame = frame;
+		
+
+		btnObserverUpdate = new ButtonObserverUpdate(frame);
+		btnObserver.addPropertyChangeListener(btnObserverUpdate);
+		
 	}
 	
 	protected void delete() {
 
-		Shape selectedShape = model.getSelectedShape();
-		System.out.println(model.getShapes());
-		System.out.println(model.getShapes());
-		System.out.println(selectedShape);
-		if (selectedShape != null) {
+		
+		if (model.getSelectedShapes().size() != 0) {
 			int selectedOption = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete?", "Warning message",
 					JOptionPane.YES_NO_OPTION);
 			if (selectedOption == JOptionPane.YES_OPTION) {
-					RemoveShapeCmd removeShapeCmd = new RemoveShapeCmd(model, selectedShape);
+				for(int i = 0; i<model.getSelectedShapes().size(); i++) {
+					Shape shape = model.getSelectedShapes().get(i);
+					System.out.println(model.getSelectedShapes());
+					RemoveShapeCmd removeShapeCmd = new RemoveShapeCmd(model, shape);
 					removeShapeCmd.execute();
 					model.getUndoStack().push(removeShapeCmd);
+					enablingButtons();
+					frame.getBtnUndo().setEnabled(true);
+					frame.getBtnRedo().setEnabled(false);
+				}
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "You haven't selected any shape!", "Error",
 					JOptionPane.WARNING_MESSAGE);
 		}
-		model.setSelectedShape(null);
 		frame.repaint();
 	}
 	
@@ -67,13 +83,13 @@ public class DrawingController {
 
 	protected void modify() {
 
-		Shape selectedShape = model.getSelectedShape();
-		//System.out.println(selectedShape);
-		if (selectedShape != null) {
+		Shape shape = model.getSelectedShapes().get(0);
+		System.out.println("selektovan");
+		if (shape != null) {
 
-			if (selectedShape instanceof Point) {
+			if (shape instanceof Point) {
 
-				Point oldState = (Point) selectedShape;
+				Point oldState = (Point) shape;
 				System.out.println(oldState);
 				DlgPoint dialog = new DlgPoint();
 				dialog.getTxtX().setText("" + Integer.toString(oldState.getX()));
@@ -115,9 +131,9 @@ public class DrawingController {
 					
 				}
 
-			} else if (selectedShape instanceof Donut) {
+			} else if (shape instanceof Donut) {
 
-				Donut oldState = (Donut) selectedShape;
+				Donut oldState = (Donut) shape;
 				DlgDonut dialog = new DlgDonut();
 
 				dialog.getTxtX().setText("" + Integer.toString(oldState.getCenter().getX()));
@@ -176,9 +192,9 @@ public class DrawingController {
 					}
 				
 				}
-			} else if (selectedShape instanceof Circle && (selectedShape instanceof Donut) == false) {
+			} else if (shape instanceof Circle && (shape instanceof Donut) == false) {
 
-				Circle oldState = (Circle) selectedShape;
+				Circle oldState = (Circle) shape;
 				DlgCircle dialog = new DlgCircle();
 
 				dialog.getTxtX().setText("" + Integer.toString(oldState.getCenter().getX()));
@@ -228,9 +244,9 @@ public class DrawingController {
 				
 				}
 
-			} else if (selectedShape instanceof Line) {
+			} else if (shape instanceof Line) {
 
-				Line oldState = (Line) selectedShape;
+				Line oldState = (Line) shape;
 				DlgLine dialog = new DlgLine();
 				System.out.println(oldState);
 				dialog.getTxtStartPointX().setText("" + Integer.toString(oldState.getStartPoint().getX()));
@@ -281,9 +297,9 @@ public class DrawingController {
 				
 				}
 
-			} else if (selectedShape instanceof Rectangle) {
+			} else if (shape instanceof Rectangle) {
 
-				Rectangle oldState = (Rectangle) selectedShape;
+				Rectangle oldState = (Rectangle) shape;
 				DlgRectangle dialog = new DlgRectangle();
 				System.out.println(oldState);
 				dialog.getTxtUpperLeftX().setText("" + Integer.toString(oldState.getUpperLeft().getX()));
@@ -338,10 +354,10 @@ public class DrawingController {
 				
 				}
 					
-			} else if (selectedShape instanceof HexagonAdapter) {
+			} else if (shape instanceof HexagonAdapter) {
 
 
-				HexagonAdapter oldState = (HexagonAdapter) selectedShape;
+				HexagonAdapter oldState = (HexagonAdapter) shape;
 				DlgHexagon dialog = new DlgHexagon();
 				System.out.println("staro stanje" + oldState);
 				dialog.getTxtX().setText("" + Integer.toString(oldState.getHexagon().getX()));
@@ -398,12 +414,15 @@ public class DrawingController {
 	
 	protected Point drawPoint(MouseEvent e) {
 		
-		Point p = new Point(e.getX(), e.getY(), false, getOutColor());
+		Point p = new Point(e.getX(), e.getY(), getOutColor());
+		p.setSelected(false);
 		AddPointCmd addPointCmd = new AddPointCmd(p, model);
-		System.out.println(addPointCmd);
+		System.out.println("ovo: " + addPointCmd);
 		addPointCmd.execute();
 		model.pushToUndoStack(addPointCmd);
 		System.out.println(model.getUndoStack());
+		frame.getBtnUndo().setEnabled(true);
+		frame.getBtnRedo().setEnabled(false);
 		
 		return p;
 	
@@ -417,6 +436,8 @@ public class DrawingController {
 			addLineCmd.execute();
 			model.pushToUndoStack(addLineCmd);
 			model.setStartPoint(null);
+			frame.getBtnUndo().setEnabled(true);
+			frame.getBtnRedo().setEnabled(false);
 			
 			return line;
 		
@@ -446,6 +467,8 @@ public class DrawingController {
 										AddRectangleCmd addRectangleCmd = new AddRectangleCmd(rect, model);
 										addRectangleCmd.execute();
 										model.pushToUndoStack(addRectangleCmd);
+										frame.getBtnUndo().setEnabled(true);
+										frame.getBtnRedo().setEnabled(false);
 										
 										return rect;
 			
@@ -478,6 +501,8 @@ public class DrawingController {
 					AddCircleCmd addCircleCmd = new AddCircleCmd(circle,model);
 					addCircleCmd.execute();
 					model.pushToUndoStack(addCircleCmd);	
+					frame.getBtnUndo().setEnabled(true);
+					frame.getBtnRedo().setEnabled(false);
 					
 					return circle;
 					
@@ -520,6 +545,8 @@ public class DrawingController {
 							AddDonutCmd addDonutCmd = new AddDonutCmd(donut, model);
 							addDonutCmd.execute();
 							model.pushToUndoStack(addDonutCmd);
+							frame.getBtnUndo().setEnabled(true);
+							frame.getBtnRedo().setEnabled(false);
 							
 							return donut;
 						
@@ -559,7 +586,9 @@ public class DrawingController {
 													Integer.parseInt(dialog.getTxtR().getText().toString())));
 						AddHexagonCmd addHexagonCmd = new AddHexagonCmd(hexagon,model);
 						addHexagonCmd.execute();
-						model.pushToUndoStack(addHexagonCmd);	
+						model.pushToUndoStack(addHexagonCmd);
+						frame.getBtnUndo().setEnabled(true);
+						frame.getBtnRedo().setEnabled(false);
 						
 						return hexagon;
 						
@@ -582,21 +611,44 @@ public class DrawingController {
 		Point click = new Point(me.getX(), me.getY());
 
 		if (frame.getTglbtnSelect().isSelected()) {
-			model.selectedShape = null;
-			Iterator<Shape> iterator = model.shapes.iterator();
-
-			while (iterator.hasNext()) {
-				Shape shape = iterator.next();
-				shape.setSelected(false);
-				if (shape.contains(click.getX(), click.getY()))
-					model.selectedShape = shape;
+			for(int i = 0; i<model.getShapes().size(); i++)
+			{
+				System.out.println(model.getShapes().size());
+				System.out.println(model.getShapes());
+				if(model.getShapes().get(i).contains(click.getX(), click.getY()))
+				{
+					Shape selectedShape = model.getShapes().get(i);
+					if (selectedShape.isSelected() == false) { // oblik nije vec selektovan -> selektuj
+						System.out.println(selectedShape);
+						SelectCmd cmdSelect = new SelectCmd(model, selectedShape);
+						cmdSelect.execute();
+						frame.getBtnUndo().setEnabled(true);
+						frame.getBtnRedo().setEnabled(false);
+						model.getUndoStack().push(cmdSelect);
+						
+						
+					}
+					else { // oblik je vec selektovan --> deselect
+					    DeselectCmd cmdDeselect = new DeselectCmd(model, selectedShape);
+						cmdDeselect.execute();
+						frame.getBtnUndo().setEnabled(true);
+						frame.getBtnRedo().setEnabled(false);
+						model.getUndoStack().push(cmdDeselect);
+						
+					}
+					
+					
+					
+				}
+				
+				frame.getView().repaint();
+					
 
 			}
 
-			if (model.selectedShape != null)
-				model.getSelectedShape().setSelected(true);
-
-		} else if (frame.getTglbtnPoint().isSelected()) {
+			
+		} else {
+			if (frame.getTglbtnPoint().isSelected()) {
 
 			newShape = drawPoint(me);
 
@@ -669,21 +721,24 @@ public class DrawingController {
 			
 		}
 
-		if (newShape != null) {
-			model.shapes.add(newShape);
-			
-		}
+		
 		//System.out.println(frame.getView());
 		//frame.s
 		frame.repaint();
-
+		}
+		enablingButtons();
 	}
 	
 	protected void undo() {
 		if(model.getUndoStack().size()>0) {
 			model.pushToRedoStack(model.getUndoStack().peek());
 			model.removeFromUndoStack();
+			enablingButtons();
 			frame.getView().repaint(); 
+			
+			if ((model.getUndoStack().size()) == 0) {
+				frame.getBtnUndo().setEnabled(false);
+			}
 		}
 		
 	}
@@ -692,30 +747,38 @@ public class DrawingController {
 		if(model.getRedoStack().size()>0) {
 			model.pushToUndoStack(model.getRedoStack().peek());
 			model.removeFromRedoStack();
+			enablingButtons();
 			frame.getView().repaint();
+			
+			if ((model.getRedoStack().size()) == 0) {
+				frame.getBtnUndo().setEnabled(false);
+			}
 		}
 		
 	}
 	
-	private void selectShape(MouseEvent e) {
-		for(int i = 0; i<model.getShapes().size(); i++)
-		{
-			if(model.getShapes().get(i).contains(e.getX(), e.getY()))
-			{
-				Shape shape = model.getShapes().get(i);
-				SelectCmd selectCmd = new SelectCmd(model, shape);
-				selectCmd.execute();
-				model.getUndoStack().push(selectCmd);
+
+
+	
+	public void enablingButtons() {
+		System.out.println(model.getSelectedShapes().size());
+		if (model.getSelectedShapes().size() != 0) {
+			
+			if (model.getSelectedShapes().size() == 1) {
+				btnObserver.setModifyEnabled(true);
+				
+				
+				
+			} else {
+				btnObserver.setModifyEnabled(false);
+
 			}
+			btnObserver.setDeleteEnabled(true);
+		} else {
+			btnObserver.setDeleteEnabled(false);
+			btnObserver.setModifyEnabled(false);
+
 		}
-	} 
-	private void stateChecker(MouseEvent e) throws Exception {
-		
-		if(frame.getState() == 7)           
-		{
-			selectShape(e);
-		}
-		
 	}
 	
 	

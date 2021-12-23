@@ -30,6 +30,7 @@ public class Donut extends Circle {
 	public Donut(Point center, int r, int innerR, boolean selected, Color color, Color innerColor) { 
 		this(center, r, innerR, selected, color);
 		setInnerColor(innerColor);
+		setSelected(selected);
 	}
 	
 	public void fill(Graphics g) {
