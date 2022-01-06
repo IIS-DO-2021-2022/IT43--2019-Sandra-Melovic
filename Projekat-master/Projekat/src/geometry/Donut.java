@@ -2,6 +2,11 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Area;
+import java.awt.Shape;
+
 
 public class Donut extends Circle {
 
@@ -43,11 +48,14 @@ public class Donut extends Circle {
 	}
 	
 	@Override
-	public void draw(Graphics g) {
-		super.draw(g);
-		g.setColor(getColor());
-		g.drawOval(getCenter().getX() - this.innerR, getCenter().getY() - this.innerR, this.innerR * 2, this.innerR * 2);
-		
+	public void draw(Graphics gr) {
+		Graphics2D g = (Graphics2D)gr.create();
+		 Shape donut= drawDonut();
+		 
+		  g.setColor(getInnerColor());
+	        g.fill(donut);
+	        g.setColor(getColor());
+		 
 		if (selected) {
 			g.setColor(Color.BLUE);
 			g.drawRect(getCenter().getX() - innerR - 2, getCenter().getY() - 2, 4, 4);
@@ -56,6 +64,23 @@ public class Donut extends Circle {
 			g.drawRect(getCenter().getX() - 2, getCenter().getY() + innerR - 2, 4, 4);
 			
 		}
+	}
+	
+	public Shape drawDonut() {
+		Shape out = new Ellipse2D.Double(getCenter().getX() - getR(),
+				 getCenter().getY() - getR(),
+				 getR()*2, 
+				 getR()*2);
+		
+		Shape in=new Ellipse2D.Double(
+				getCenter().getX() - innerR, 
+				getCenter().getY() - innerR,
+	            innerR*2, 
+	            innerR*2);
+		
+		Area area = new Area(out);
+        area.subtract(new Area(in)); //subtracting the inner shape from the outer shape
+        return area;
 	}
 	
 	@Override
