@@ -4,8 +4,12 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.lang.System.Logger;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import adapter.HexagonAdapter;
 import command.AddCircleCmd;
@@ -14,9 +18,14 @@ import command.AddHexagonCmd;
 import command.AddLineCmd;
 import command.AddPointCmd;
 import command.AddRectangleCmd;
+import command.BringToBackCmd;
+import command.BringToFrontCmd;
+import command.Command;
 import command.DeselectCmd;
 import command.RemoveShapeCmd;
 import command.SelectCmd;
+import command.ToBackCmd;
+import command.ToFrontCmd;
 import command.UpdateCircleCmd;
 import command.UpdateDonutCmd;
 import command.UpdateHexagonCmd;
@@ -32,15 +41,20 @@ import geometry.Rectangle;
 import geometry.Shape;
 import observer.ButtonObserver;
 import observer.ButtonObserverUpdate;
+import strategy.FileDraw;
+import strategy.FileDrawing;
+import strategy.FileLog;
+import strategy.FileManager;
 
 public class DrawingController {
 	
 	private DrawingModel model;
 	private DrawingFrame frame;
+	private FileManager fileManager;
 	private Color outColor = Color.BLACK;
 	private Color inColor = Color.BLACK;
 	
-	
+	private DefaultListModel<String> actLog;
 	private ButtonObserver btnObserver = new ButtonObserver();
 	private ButtonObserverUpdate btnObserverUpdate;
 	
@@ -52,20 +66,24 @@ public class DrawingController {
 		btnObserverUpdate = new ButtonObserverUpdate(frame);
 		btnObserver.addPropertyChangeListener(btnObserverUpdate);
 		
+		this.actLog = frame.getList();
+		
 	}
 	
-	protected void delete() {
+	public void delete() {
 
 		
 		if (model.getSelectedShapes().size() != 0) {
 			int selectedOption = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete?", "Warning message",
 					JOptionPane.YES_NO_OPTION);
+			System.out.println(model.getSelectedShapes());
 			if (selectedOption == JOptionPane.YES_OPTION) {
-				for(int i = 0; i<model.getSelectedShapes().size(); i++) {
+				for(int i = 0; i<model.getSelectedShapes().size(); i=i+1) {
 					Shape shape = model.getSelectedShapes().get(i);
-					System.out.println(model.getSelectedShapes());
+					System.out.println(shape);
 					RemoveShapeCmd removeShapeCmd = new RemoveShapeCmd(model, shape);
 					removeShapeCmd.execute();
+					actLog.addElement("Deleted->" + shape.toString());
 					model.getUndoStack().push(removeShapeCmd);
 					enablingButtons();
 					frame.getBtnUndo().setEnabled(true);
@@ -113,6 +131,7 @@ public class DrawingController {
 
 								Point newState = new Point(Integer.parseInt(dialog.getTxtX().getText()), Integer.parseInt(dialog.getTxtY().getText()), dialog.getC());
 								System.out.println(newState);
+								actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
 								UpdatePointCmd updatePointCmd = new UpdatePointCmd(oldState , newState);
 								updatePointCmd.execute();
 								model.pushToUndoStack(updatePointCmd);
@@ -170,7 +189,7 @@ public class DrawingController {
 											Integer.parseInt(dialog.getTxtR().getText().toString()),
 											Integer.parseInt(dialog.getTxtInnerR().getText().toString()), false,
 											outColor, outColor);
-									
+									actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
 									UpdateDonutCmd updateDonutCmd = new UpdateDonutCmd(oldState, newState);
 									updateDonutCmd.execute();
 									model.pushToUndoStack(updateDonutCmd);
@@ -227,7 +246,7 @@ public class DrawingController {
 												Integer.parseInt(dialog.getTxtY().getText().toString())),
 										Integer.parseInt(dialog.getTxtR().getText().toString()), false,
 										outColor, outColor);
-							
+								actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
 								UpdateCircleCmd updateCircleCmd = new UpdateCircleCmd(oldState, newState);
 								updateCircleCmd.execute();
 								model.pushToUndoStack(updateCircleCmd);
@@ -282,6 +301,7 @@ public class DrawingController {
 												Integer.parseInt(dialog.getTxtEndPointY().getText())), 
 										dialog.getColor());
 								System.out.println(newState);
+								actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
 								System.out.println("stara" + oldState);
 								UpdateLineCmd updateLineCmd = new UpdateLineCmd(oldState,newState);
 								System.out.println("jxkz" + updateLineCmd);
@@ -339,6 +359,7 @@ public class DrawingController {
 									inColor
 									);
 							System.out.println(newState);
+							actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
 							UpdateRectangleCmd updateRectangleCmd = new UpdateRectangleCmd(oldState,newState);
 							updateRectangleCmd.execute();
 							System.out.println(newState);
@@ -367,7 +388,7 @@ public class DrawingController {
 				//dialog.getBtnOutlineColor().setBackground(oldState.getColor());
 
 				dialog.setVisible(true);
-				
+				System.out.println(dialog.isConfirm()+"confirm");
 				System.out.println("staro stanje2" + oldState);
 				if (dialog.isConfirm()) {
 					System.out.println("staro stanje u ifu" + oldState);
@@ -390,6 +411,7 @@ public class DrawingController {
 												Integer.parseInt(dialog.getTxtY().getText()),
 										Integer.parseInt(dialog.getTxtR().getText())));
 								System.out.println("novo stanje" + newState);
+								actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
 								UpdateHexagonCmd updateHexagonCmd = new UpdateHexagonCmd(oldState, newState);
 								updateHexagonCmd.execute();
 								model.pushToUndoStack(updateHexagonCmd);
@@ -421,6 +443,7 @@ public class DrawingController {
 		addPointCmd.execute();
 		model.pushToUndoStack(addPointCmd);
 		System.out.println(model.getUndoStack());
+		actLog.addElement("Added->" + p.toString());
 		frame.getBtnUndo().setEnabled(true);
 		frame.getBtnRedo().setEnabled(false);
 		
@@ -436,6 +459,7 @@ public class DrawingController {
 			addLineCmd.execute();
 			model.pushToUndoStack(addLineCmd);
 			model.setStartPoint(null);
+			actLog.addElement("Added->" + line.toString());
 			frame.getBtnUndo().setEnabled(true);
 			frame.getBtnRedo().setEnabled(false);
 			
@@ -467,6 +491,7 @@ public class DrawingController {
 										AddRectangleCmd addRectangleCmd = new AddRectangleCmd(rect, model);
 										addRectangleCmd.execute();
 										model.pushToUndoStack(addRectangleCmd);
+										actLog.addElement("Added->" + rect.toString());
 										frame.getBtnUndo().setEnabled(true);
 										frame.getBtnRedo().setEnabled(false);
 										
@@ -501,6 +526,7 @@ public class DrawingController {
 					AddCircleCmd addCircleCmd = new AddCircleCmd(circle,model);
 					addCircleCmd.execute();
 					model.pushToUndoStack(addCircleCmd);	
+					actLog.addElement("Added->" + circle.toString());
 					frame.getBtnUndo().setEnabled(true);
 					frame.getBtnRedo().setEnabled(false);
 					
@@ -545,6 +571,7 @@ public class DrawingController {
 							AddDonutCmd addDonutCmd = new AddDonutCmd(donut, model);
 							addDonutCmd.execute();
 							model.pushToUndoStack(addDonutCmd);
+							actLog.addElement("Added->" + donut.toString());
 							frame.getBtnUndo().setEnabled(true);
 							frame.getBtnRedo().setEnabled(false);
 							
@@ -587,6 +614,7 @@ public class DrawingController {
 						AddHexagonCmd addHexagonCmd = new AddHexagonCmd(hexagon,model);
 						addHexagonCmd.execute();
 						model.pushToUndoStack(addHexagonCmd);
+						actLog.addElement("Added->" + hexagon.toString());
 						frame.getBtnUndo().setEnabled(true);
 						frame.getBtnRedo().setEnabled(false);
 						
@@ -622,6 +650,7 @@ public class DrawingController {
 						System.out.println(selectedShape);
 						SelectCmd cmdSelect = new SelectCmd(model, selectedShape);
 						cmdSelect.execute();
+						actLog.addElement("Selected->" + selectedShape.toString());
 						frame.getBtnUndo().setEnabled(true);
 						frame.getBtnRedo().setEnabled(false);
 						model.getUndoStack().push(cmdSelect);
@@ -631,6 +660,7 @@ public class DrawingController {
 					else { // oblik je vec selektovan --> deselect
 					    DeselectCmd cmdDeselect = new DeselectCmd(model, selectedShape);
 						cmdDeselect.execute();
+						actLog.addElement("Deselected->" + selectedShape.toString());
 						frame.getBtnUndo().setEnabled(true);
 						frame.getBtnRedo().setEnabled(false);
 						model.getUndoStack().push(cmdDeselect);
@@ -711,9 +741,9 @@ public class DrawingController {
 			
 			DlgHexagon dialog = new DlgHexagon();
 			dialog.setModal(true);
-			dialog.getTxtX().setText("" + Integer.toString(click.getX()));
+			dialog.getTxtX().setText("" + Integer.toString(me.getX()));
 			dialog.getTxtX().setEditable(false);
-			dialog.getTxtY().setText("" + Integer.toString(click.getY()));
+			dialog.getTxtY().setText("" + Integer.toString(me.getY()));
 			dialog.getTxtY().setEditable(false);
 			dialog.setVisible(true);
 
@@ -729,9 +759,10 @@ public class DrawingController {
 		enablingButtons();
 	}
 	
-	protected void undo() {
+	public void undo() {
 		if(model.getUndoStack().size()>0) {
 			model.pushToRedoStack(model.getUndoStack().peek());
+			actLog.addElement("Undo->" + model.getUndoStack().peek().toString());
 			model.removeFromUndoStack();
 			enablingButtons();
 			frame.getView().repaint(); 
@@ -743,9 +774,10 @@ public class DrawingController {
 		
 	}
 	
-	protected void redo() {
+	public void redo() {
 		if(model.getRedoStack().size()>0) {
 			model.pushToUndoStack(model.getRedoStack().peek());
+			actLog.addElement("Redo->" + model.getRedoStack().peek().toString());
 			model.removeFromRedoStack();
 			enablingButtons();
 			frame.getView().repaint();
@@ -754,6 +786,134 @@ public class DrawingController {
 				frame.getBtnUndo().setEnabled(false);
 			}
 		}
+		
+	}
+	
+	public void bringToBack() {
+
+		
+		if(model.getSelectedShapes().size() == 1) {
+			
+			int index = model.getShapes().indexOf(model.getSelectedShapes().get(0));
+			Shape shape = model.getShapes().get(index);
+			
+			if(index==0) {
+				
+				JOptionPane.showMessageDialog(null, "Element is alrady in back!"); // checking if shape is on bottom already				
+				
+			}else {
+				
+				BringToBackCmd BringToBack = new BringToBackCmd(model,shape, index);
+				model.pushToUndoStack(BringToBack);
+				actLog.addElement("Bring to back->" + shape.toString());
+				BringToBack.execute();
+				
+				
+			}
+			
+		}
+		frame.repaint();
+		if ((model.getRedoStack().size()) == 0) {
+			frame.getBtnBtB().setEnabled(false);
+		}
+		
+	
+			
+	}
+	
+	public void bringToFront() {
+		
+		if(model.getSelectedShapes().size() == 1) {
+			
+			int index = model.getShapes().indexOf(model.getSelectedShapes().get(0));
+			Shape shape = model.getShapes().get(index);
+			
+			if(index==model.getShapes().size()-1) {
+				
+				JOptionPane.showMessageDialog(null, "Element is alrady in front!"); // checking if shape is on bottom already				
+				
+			}else {
+				
+				BringToFrontCmd BringToFront = new BringToFrontCmd(model,shape);
+				model.pushToUndoStack(BringToFront);
+				actLog.addElement("Bring to front->" + shape.toString());
+				BringToFront.execute();
+				
+				
+			}
+			
+		}
+		frame.repaint();
+		if ((model.getRedoStack().size()) == 0) {
+			frame.getBtnBtF().setEnabled(false);
+		}
+	
+		
+	}
+	
+	public void toBack() {
+
+		if(model.getSelectedShapes().size() == 1) {
+			
+			int index = model.getShapes().indexOf(model.getSelectedShapes().get(0));
+			Shape shape = model.getShapes().get(index);
+			
+			if(index==0) {
+				
+				JOptionPane.showMessageDialog(null, "Element is alrady in back!"); // checking if shape is on bottom already				
+				
+			}else {
+				
+				ToBackCmd toBack = new ToBackCmd(model,index, shape);
+				model.pushToUndoStack(toBack);
+				actLog.addElement("Bring to back->" + shape.toString());
+				toBack.execute();
+				
+				
+			}
+			
+		}
+		frame.repaint();
+		if ((model.getRedoStack().size()) == 0) {
+			frame.getBtnBtB().setEnabled(false);
+		}
+		
+	
+			
+	
+		
+	}
+	
+	public void toFront() {
+
+		
+		if(model.getSelectedShapes().size() == 1) {
+			
+			int index = model.getShapes().indexOf(model.getSelectedShapes().get(0));
+			Shape shape = model.getShapes().get(index);
+			
+			if(index==model.getShapes().size()-1) {
+				
+				JOptionPane.showMessageDialog(null, "Element is alrady in front!"); // checking if shape is on bottom already				
+				
+			}else {
+				
+				ToFrontCmd toFront = new ToFrontCmd(model,index, shape);
+				model.pushToUndoStack(toFront);
+				actLog.addElement("Bring to front->" + shape.toString());
+				toFront.execute();
+				
+				
+			}
+			
+		}
+		frame.repaint();
+		if ((model.getRedoStack().size()) == 0) {
+			frame.getBtnBtF().setEnabled(false);
+		}
+	
+		
+	
 		
 	}
 	
@@ -766,11 +926,17 @@ public class DrawingController {
 			
 			if (model.getSelectedShapes().size() == 1) {
 				btnObserver.setModifyEnabled(true);
-				
-				
+				btnObserver.setBtBEnabled(true);
+				btnObserver.setBtFEnabled(true);
+				btnObserver.setToBackEnabled(true);
+				btnObserver.setToFrontEnabled(true);
 				
 			} else {
 				btnObserver.setModifyEnabled(false);
+				btnObserver.setBtBEnabled(false);
+				btnObserver.setBtFEnabled(false);
+				btnObserver.setToBackEnabled(false);
+				btnObserver.setToFrontEnabled(false);
 
 			}
 			btnObserver.setDeleteEnabled(true);
@@ -779,6 +945,68 @@ public class DrawingController {
 			btnObserver.setModifyEnabled(false);
 
 		}
+	}
+	
+	public void serialize() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
+		chooser.enableInputMethods(false);
+		chooser.setMultiSelectionEnabled(false);
+		chooser.setFileHidingEnabled(false);
+		chooser.setEnabled(true);
+		chooser.setDialogTitle("Save");
+		chooser.setAcceptAllFileFilterUsed(false);
+
+		if (!model.getShapes().isEmpty()) {
+			chooser.setFileFilter(new FileNameExtensionFilter("Serialized draw", "ser"));
+			chooser.setFileFilter(new FileNameExtensionFilter("Image", "img"));
+		}
+		if (!model.getUndoStack().isEmpty() || model.getShapes().isEmpty()) chooser.setFileFilter(new FileNameExtensionFilter("Commands log", "log"));
+		if(chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+			if (chooser.getFileFilter().getDescription().equals("Serialized draw")) fileManager = new FileManager(new FileDraw(model));
+			else if (chooser.getFileFilter().getDescription().equals("Commands log")) fileManager = new FileManager(new FileLog(frame, model, this));
+			else if (chooser.getFileFilter().getDescription().equals("Image")) fileManager = new FileManager(new FileDrawing(frame));
+			fileManager.save(chooser.getSelectedFile());
+		}
+		chooser.setVisible(false);
+	}
+
+
+	public void unserialize() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.enableInputMethods(true);
+		chooser.setMultiSelectionEnabled(false);
+		chooser.setFileHidingEnabled(false);
+		chooser.setEnabled(true);
+		chooser.setAcceptAllFileFilterUsed(false);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setFileSelectionMode(JFileChooser.OPEN_DIALOG);
+		chooser.setFileFilter(new FileNameExtensionFilter("Serialized draw", "ser"));
+		chooser.setFileFilter(new FileNameExtensionFilter("Commands log", "log"));
+
+		if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			frame.getBtnUndo().setVisible(false);
+			frame.getBtnRedo().setVisible(false);
+			frame.getList().clear();
+			model.getShapes().clear();
+			model.getUndoStack().clear();
+			model.getRedoStack().clear();
+			frame.getView().repaint();
+			if (chooser.getFileFilter().getDescription().equals("Serialized draw")) {
+				fileManager = new FileManager(new FileDraw(model));
+			}
+			else if (chooser.getFileFilter().getDescription().equals("Commands log")) fileManager = new FileManager(new FileLog(frame, model, this));
+			fileManager.open(chooser.getSelectedFile());
+		}	
+		chooser.setVisible(false);
+	}
+
+	
+	public void executeCommand(Command command) {
+		command.execute();
+		model.pushToUndoStack(command);
+		frame.getView().repaint();
 	}
 	
 	
@@ -797,6 +1025,10 @@ public class DrawingController {
 	public void setInColor(Color inColor) {
 		this.inColor = inColor;
 	}
+
+	
+	
+	
 
 
 }

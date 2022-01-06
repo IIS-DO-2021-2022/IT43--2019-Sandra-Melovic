@@ -33,6 +33,8 @@ public class Circle extends SurfaceShape{
 		setInnerColor(innerColor);
 		setSelected(selected);
 	}
+	
+
 
 	public double area() {
 		

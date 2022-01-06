@@ -7,16 +7,25 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
 
 public class DrawingFrame extends JFrame{
 	
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private DrawingView view = new DrawingView();
 	private DrawingController controller;
@@ -31,7 +40,15 @@ public class DrawingFrame extends JFrame{
 	private JButton btnRedo;
 	private JButton btnDelete;
 	private JButton btnModify;
+	private JButton btnSave;
+	private JButton btnOpen;
+	private JButton btnBtB;
+	private JButton btnBtF;
+	private JButton btnToBack;
+	private JButton btnToFront;
 	private int mainState = 0;
+	private DefaultListModel <String> dlmList;
+
 
 	public DrawingFrame() {
 
@@ -51,6 +68,11 @@ public class DrawingFrame extends JFrame{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		
+		
+		dlmList = new DefaultListModel<String>();
+	
+	
 
 		view.setBackground(Color.WHITE);
 		contentPane.add(view, BorderLayout.CENTER);
@@ -139,7 +161,7 @@ public class DrawingFrame extends JFrame{
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.delete();
-				tglbtnSelect.setSelected(false);
+				btnDelete.setSelected(false);
 			}
 		});
 		pnlSouth.add(btnDelete);
@@ -168,8 +190,83 @@ public class DrawingFrame extends JFrame{
 		});
 		pnlSouth.add(btnRedo);
 		btnGroup.add(btnRedo);
+		
+		
+		btnSave = new JButton("Save");
+		btnSave.setBackground(Color.PINK);
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.serialize();
+			}
+		});
+		pnlSouth.add(btnSave);
+		btnGroup.add(btnSave);
+		
+		btnOpen = new JButton("Open");
+		btnOpen.setBackground(Color.PINK);
+		btnOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.unserialize();
+			}
+		});
+		pnlSouth.add(btnOpen);
+		
+		JPanel pnlEast = new JPanel();
+		pnlEast.setBackground(Color.BLACK);
+		
+		pnlEast.setLayout (new GridLayout(4,5));
+
+		
+		contentPane.add(pnlEast, BorderLayout.EAST);
+
+		
+		
+		btnBtB = new JButton("Bring to back");
+		btnBtB.setBackground(Color.PINK);
+		btnBtB.setEnabled(false);
+		btnBtB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.bringToBack();
+			}
+		});
+		pnlEast.add(btnBtB);
+		
+		btnBtF = new JButton("Bring to Front");
+		btnBtF.setBackground(Color.PINK);
+		btnBtF.setEnabled(false);
+		btnBtF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.bringToFront();
+							}
+		});
+		pnlEast.add(btnBtF);
+		
+		btnToBack = new JButton("To Back");
+		btnToBack.setBackground(Color.PINK);
+		btnToBack.setEnabled(false);
+		btnToBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.toBack();
+			}
+		});
+		pnlEast.add(btnToBack);
+		
+		btnToFront = new JButton("To Front");
+		btnToFront.setBackground(Color.PINK);
+		btnToFront.setEnabled(false);
+		btnToFront.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.toFront();
+							}
+		});
+		pnlEast.add(btnToFront);
+	
+		
+
 
 		//view.repaint();
+		
+
 	}
 	
 	public DrawingView getView() {
@@ -278,6 +375,28 @@ public class DrawingFrame extends JFrame{
 	public JButton getBtnModify() {
 		return btnModify;
 	}
+	
+	public DefaultListModel<String> getList() {
+		return dlmList;
+	}
 
+	public JButton getBtnBtB() {
+		return btnBtB;
+	}
+
+	public JButton getBtnBtF() {
+		return btnBtF;
+	}
+
+	public JButton getBtnToBack() {
+		return btnToBack;
+	}
+
+	public JButton getBtnToFront() {
+		return btnToFront;
+	}
+
+	
+	
 
 }

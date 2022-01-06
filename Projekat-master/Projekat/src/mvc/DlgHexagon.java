@@ -118,7 +118,9 @@ public class DlgHexagon extends JDialog {
 				JButton okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						System.out.println("hellooooooo . . .");
 						setConfirm(true);
+						System.out.println(isConfirm());
 						setVisible(false);
 					}
 				});

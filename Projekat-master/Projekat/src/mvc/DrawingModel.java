@@ -1,5 +1,6 @@
 package mvc;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -15,8 +16,9 @@ import geometry.Point;
 import geometry.Rectangle;
 import geometry.Shape;
 
-public class DrawingModel {
+public class DrawingModel implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	public List<Shape> shapes = new ArrayList<Shape>();
 	private ArrayList<Shape> selectedShapes = new ArrayList<Shape>();
 	public Point startPoint;
@@ -118,9 +120,19 @@ public class DrawingModel {
 		return selectedShapes;
 	}
 
-
+	public void addMultiple(ArrayList<Shape> shapes) {
+		this.shapes.addAll(shapes);
+		
+		
+	}
 	
-
+	public int getIndexOf(Shape shape) {
+		return shapes.indexOf(shape);
+	}
+	
+	public Shape getByIndex(int index) {
+		return shapes.get(index);
+	}
 
 
 }
