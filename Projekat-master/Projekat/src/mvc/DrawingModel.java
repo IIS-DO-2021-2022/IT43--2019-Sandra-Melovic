@@ -4,16 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
 import command.Command;
-import geometry.Circle;
-import geometry.Donut;
-import geometry.Line;
 import geometry.Point;
-import geometry.Rectangle;
 import geometry.Shape;
 
 public class DrawingModel implements Serializable {
@@ -29,7 +21,6 @@ public class DrawingModel implements Serializable {
 
 	public void remove(Shape toBeRemoved)
 	{
-		int selectedShapesSizeBefore = selectedShapes.size();
 		if(shapes.remove(toBeRemoved) == false) {
 			System.out.println("Shape does not exist in list of shapes!");
 		}
@@ -39,13 +30,11 @@ public class DrawingModel implements Serializable {
 	}
 	
 	public void add(Shape toBeAdded) {
-			int selectedShapesSizeBefore = selectedShapes.size();
 			shapes.add(toBeAdded);
 			
 	}
 	
 	public void addSelectedShape(Shape toBeAdded) {
-		int selectedShapesSizeBefore = selectedShapes.size();
 		selectedShapes.add(toBeAdded);
 		
 }
@@ -88,14 +77,12 @@ public class DrawingModel implements Serializable {
 	
 	public void pushToUndoStack(Command toBePushed) {
 		undoCounter++;
-		int undoStackSizeBefore = undoStack.size();
 		this.undoStack.push(toBePushed);
 	
 	}
 	
 	public void removeFromUndoStack() {
 		undoCounter--;
-		int undoStackSizeBefore = undoStack.size();
 		if(undoStack.peek()!=null) {
 			this.undoStack.pop().unexecute();
 		}
@@ -103,16 +90,20 @@ public class DrawingModel implements Serializable {
 	}
 	
 	public void pushToRedoStack(Command toBePushed) {
-		int redoStackSizeBefore = redoStack.size();
 		this.redoStack.push(toBePushed);
 	
 	}
 	
 	public void removeFromRedoStack() {
-		int redoStackSizeBefore = redoStack.size();
 		if(redoStack.peek()!=null) {
 			this.redoStack.pop().execute();
 		}
+		
+	}
+	
+	public void clear() {
+		
+		shapes.clear();
 		
 	}
 	

@@ -25,4 +25,8 @@ public class AddRectangleCmd implements Command {
 		model.remove(rectangle);
 
 }
+	@Override
+	public String toString() {
+		return "Added->" + rectangle.toString();
+	}
 }

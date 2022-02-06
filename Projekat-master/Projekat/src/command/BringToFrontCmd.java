@@ -25,7 +25,7 @@ public class BringToFrontCmd implements Command {
 	}
 
 	@Override
-	public void unexecute() {//Undo 
+	public void unexecute() {
 		model.getShapes().remove(shape);
 		model.getShapes().add(index,shape);
 

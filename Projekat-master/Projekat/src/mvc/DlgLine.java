@@ -35,7 +35,6 @@ public class DlgLine extends JDialog {
 	public boolean isOk;
 	public Line line;
 	private Color color = Color.BLACK;
-	private JButton btnOutlineColor;
 
 	/**
 	 * Launch the application.
@@ -73,7 +72,7 @@ public class DlgLine extends JDialog {
 		{
 			JLabel lblStartPointX = new JLabel("Start point X:");
 			GridBagConstraints gbc_lblStartPointX = new GridBagConstraints();
-			gbc_lblStartPointX.insets = new Insets(0, 0, 5, 5);
+			gbc_lblStartPointX.insets = new Insets(20, 70, 5, 5);
 			gbc_lblStartPointX.gridx = 1;
 			gbc_lblStartPointX.gridy = 1;
 			contentPanel.add(lblStartPointX, gbc_lblStartPointX);
@@ -81,7 +80,7 @@ public class DlgLine extends JDialog {
 		{
 			JLabel lblStartPointY = new JLabel("Start point Y:");
 			GridBagConstraints gbc_lblStartPointY = new GridBagConstraints();
-			gbc_lblStartPointY.insets = new Insets(0, 0, 5, 5);
+			gbc_lblStartPointY.insets = new Insets(20, 70, 5, 5);
 			gbc_lblStartPointY.gridx = 5;
 			gbc_lblStartPointY.gridy = 1;
 			contentPanel.add(lblStartPointY, gbc_lblStartPointY);
@@ -89,7 +88,7 @@ public class DlgLine extends JDialog {
 		{
 			txtStartPointX = new JTextField();
 			GridBagConstraints gbc_txtStartPointX = new GridBagConstraints();
-			gbc_txtStartPointX.insets = new Insets(0, 0, 5, 5);
+			gbc_txtStartPointX.insets = new Insets(0, 70, 5, 5);
 			gbc_txtStartPointX.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtStartPointX.gridx = 1;
 			gbc_txtStartPointX.gridy = 2;
@@ -99,7 +98,7 @@ public class DlgLine extends JDialog {
 		{
 			txtStartPointY = new JTextField();
 			GridBagConstraints gbc_txtStartPointY = new GridBagConstraints();
-			gbc_txtStartPointY.insets = new Insets(0, 0, 5, 5);
+			gbc_txtStartPointY.insets = new Insets(0, 70, 5, 5);
 			gbc_txtStartPointY.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtStartPointY.gridx = 5;
 			gbc_txtStartPointY.gridy = 2;
@@ -109,7 +108,7 @@ public class DlgLine extends JDialog {
 		{
 			JLabel lblEndPointX = new JLabel("End point X:");
 			GridBagConstraints gbc_lblEndPointX = new GridBagConstraints();
-			gbc_lblEndPointX.insets = new Insets(0, 0, 5, 5);
+			gbc_lblEndPointX.insets = new Insets(20, 70, 5, 5);
 			gbc_lblEndPointX.gridx = 1;
 			gbc_lblEndPointX.gridy = 4;
 			contentPanel.add(lblEndPointX, gbc_lblEndPointX);
@@ -117,7 +116,7 @@ public class DlgLine extends JDialog {
 		{
 			JLabel lblEndPointY = new JLabel("End point Y:");
 			GridBagConstraints gbc_lblEndPointY = new GridBagConstraints();
-			gbc_lblEndPointY.insets = new Insets(0, 0, 5, 5);
+			gbc_lblEndPointY.insets = new Insets(20, 70, 5, 5);
 			gbc_lblEndPointY.gridx = 5;
 			gbc_lblEndPointY.gridy = 4;
 			contentPanel.add(lblEndPointY, gbc_lblEndPointY);
@@ -125,41 +124,23 @@ public class DlgLine extends JDialog {
 		{
 			txtEndPointX = new JTextField();
 			GridBagConstraints gbc_txtEndPointX = new GridBagConstraints();
-			gbc_txtEndPointX.insets = new Insets(0, 0, 5, 5);
+			gbc_txtEndPointX.insets = new Insets(0, 70, 5, 5);
 			gbc_txtEndPointX.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtEndPointX.gridx = 1;
 			gbc_txtEndPointX.gridy = 5;
 			contentPanel.add(txtEndPointX, gbc_txtEndPointX);
 			txtEndPointX.setColumns(10);
 		}
-		
-		btnOutlineColor = new JButton("OUTLINE COLOR");
-		btnOutlineColor.setBackground(Color.PINK);
-		btnOutlineColor.setForeground(Color.BLACK);
-		btnOutlineColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Color outlineColor = JColorChooser.showDialog(null, "Choose outline color",
-						btnOutlineColor.getBackground());
-				if (outlineColor != null)
-					btnOutlineColor.setBackground(outlineColor);
-
-			}
-		});
 		{
 			txtEndPointY = new JTextField();
 			GridBagConstraints gbc_txtEndPointY = new GridBagConstraints();
-			gbc_txtEndPointY.insets = new Insets(0, 0, 5, 5);
+			gbc_txtEndPointY.insets = new Insets(0, 70, 5, 5);
 			gbc_txtEndPointY.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtEndPointY.gridx = 5;
 			gbc_txtEndPointY.gridy = 5;
 			contentPanel.add(txtEndPointY, gbc_txtEndPointY);
 			txtEndPointY.setColumns(10);
 		}
-		GridBagConstraints gbc_btnOutlineColor = new GridBagConstraints();
-		gbc_btnOutlineColor.insets = new Insets(0, 0, 0, 5);
-		gbc_btnOutlineColor.gridx = 2;
-		gbc_btnOutlineColor.gridy = 8;
-		contentPanel.add(btnOutlineColor, gbc_btnOutlineColor);
 
 		{
 			JPanel buttonPane = new JPanel();
@@ -246,12 +227,5 @@ public class DlgLine extends JDialog {
 		this.line = line;
 	}
 
-	public JButton getBtnOutlineColor() {
-		return btnOutlineColor;
-	}
-
-	public void setBtnOutlineColor(JButton btnOutlineColor) {
-		this.btnOutlineColor = btnOutlineColor;
-	}
 
 }

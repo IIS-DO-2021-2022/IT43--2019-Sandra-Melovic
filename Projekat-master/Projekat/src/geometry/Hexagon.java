@@ -1,4 +1,4 @@
-package geometry;
+/*package geometry;
 
 import java.awt.Polygon;
 import java.awt.Graphics;
@@ -15,13 +15,28 @@ public class Hexagon implements Serializable
     private Color borderColor;
     private Color areaColor;
     
+    public Hexagon() {
+    	
+    }
+    
     public Hexagon(final int x, final int y, final int r) {
         this.x = x;
         this.y = y;
         this.r = r;
     }
     
-    public void paint(final Graphics g) {
+    public Hexagon(final int x, final int y, final int r, Color borderColor, Color areaColor) {
+       this(x,y,r);
+       this.borderColor=borderColor;
+       this.areaColor=areaColor;
+    }
+    
+    public Hexagon(final int x, final int y, final int r, boolean selected,Color borderColor, Color areaColor) {
+    	this(x,y,r,borderColor,areaColor);
+    	this.selected=selected;
+    }
+
+	public void paint(final Graphics g) {
         final int[] xovi = new int[6];
         final int[] yoni = new int[6];
         final Polygon plg = new Polygon();
@@ -99,4 +114,4 @@ public class Hexagon implements Serializable
     }
     
     
-}
+}*/

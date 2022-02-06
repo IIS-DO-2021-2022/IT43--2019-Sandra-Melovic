@@ -45,6 +45,9 @@ public class DlgHexagon extends JDialog {
 	 * Create the dialog.
 	 */
 	public DlgHexagon() {
+		setTitle("Add or modify hexagon");
+		System.out.println("jeste");
+		setModal(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(Color.PINK);
@@ -57,17 +60,17 @@ public class DlgHexagon extends JDialog {
 		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 		{
-			JLabel lblX = new JLabel("X");
+			JLabel lblX = new JLabel("Coordinate X:");
 			GridBagConstraints gbc_lblX = new GridBagConstraints();
-			gbc_lblX.insets = new Insets(0, 0, 5, 5);
+			gbc_lblX.insets = new Insets(20, 0, 5, 5);
 			gbc_lblX.gridx = 2;
 			gbc_lblX.gridy = 1;
 			contentPanel.add(lblX, gbc_lblX);
 		}
 		{
-			JLabel lblY = new JLabel("Y");
+			JLabel lblY = new JLabel("Coordinate Y:");
 			GridBagConstraints gbc_lblY = new GridBagConstraints();
-			gbc_lblY.insets = new Insets(0, 0, 5, 5);
+			gbc_lblY.insets = new Insets(20, 0, 5, 5);
 			gbc_lblY.gridx = 8;
 			gbc_lblY.gridy = 1;
 			contentPanel.add(lblY, gbc_lblY);
@@ -93,9 +96,9 @@ public class DlgHexagon extends JDialog {
 			txtY.setColumns(10);
 		}
 		{
-			JLabel lblR = new JLabel("R");
+			JLabel lblR = new JLabel("Radius:");
 			GridBagConstraints gbc_lblR = new GridBagConstraints();
-			gbc_lblR.insets = new Insets(0, 0, 5, 5);
+			gbc_lblR.insets = new Insets(20, 0, 5, 5);
 			gbc_lblR.gridx = 4;
 			gbc_lblR.gridy = 4;
 			contentPanel.add(lblR, gbc_lblR);
@@ -118,9 +121,7 @@ public class DlgHexagon extends JDialog {
 				JButton okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						System.out.println("hellooooooo . . .");
 						setConfirm(true);
-						System.out.println(isConfirm());
 						setVisible(false);
 					}
 				});

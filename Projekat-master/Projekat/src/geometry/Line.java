@@ -2,9 +2,14 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
-public class Line extends Shape{
+public class Line extends Shape implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Point startPoint;
 	private Point endPoint;
 	
@@ -67,7 +72,8 @@ public class Line extends Shape{
 	
 	@Override
 	public String toString() {
-		return startPoint + " --> " + endPoint;
+		return "Line" + ":" +  getStartPoint().getX()+ ","+ getStartPoint().getY()+ "," + getEndPoint().getX() + "," + getEndPoint().getY() + "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue();
+		 //return "Line: start point x=" + startPoint.getX() + "; start point y=" + startPoint.getY() + "; end point x=" + endPoint.getX() + "; end point y=" + endPoint.getY() + "; color=" + getColor().toString().substring(14).replace('=', '-');
 	}
 	
 	@Override

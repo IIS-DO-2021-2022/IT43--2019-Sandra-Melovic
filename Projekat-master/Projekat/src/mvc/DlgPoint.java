@@ -30,7 +30,6 @@ public class DlgPoint extends JDialog {
 	private JTextField txtY;
 	private Point p;
 	private boolean isOk;
-	private JButton btnColor; 
 	private Color c; 
 	private DrawingModel model;
 
@@ -62,64 +61,47 @@ public class DlgPoint extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0};
-		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 		{
-			JLabel lblX = new JLabel("X coordinate:");
+			JLabel lblX = new JLabel("Coordinate X:");
 			GridBagConstraints gbc_lblX = new GridBagConstraints();
-			gbc_lblX.insets = new Insets(0, 0, 5, 5);
-			gbc_lblX.gridx = 4;
+			gbc_lblX.insets = new Insets(20, 150, 5, 5);
+			gbc_lblX.gridx = 6;
 			gbc_lblX.gridy = 1;
 			contentPanel.add(lblX, gbc_lblX);
 		}
 		{
-			JLabel lblY = new JLabel("Y coordinate:");
-			GridBagConstraints gbc_lblY = new GridBagConstraints();
-			gbc_lblY.insets = new Insets(0, 0, 5, 5);
-			gbc_lblY.gridx = 9;
-			gbc_lblY.gridy = 1;
-			contentPanel.add(lblY, gbc_lblY);
-		}
-		{
 			txtX = new JTextField();
 			GridBagConstraints gbc_txtX = new GridBagConstraints();
-			gbc_txtX.insets = new Insets(0, 0, 5, 5);
+			gbc_txtX.insets = new Insets(0, 150, 5, 5);
 			gbc_txtX.fill = GridBagConstraints.HORIZONTAL;
-			gbc_txtX.gridx = 4;
+			gbc_txtX.gridx = 6;
 			gbc_txtX.gridy = 2;
 			contentPanel.add(txtX, gbc_txtX);
 			txtX.setColumns(10);
 		}
 		{
+			JLabel lblY = new JLabel("Coordinate Y:");
+			GridBagConstraints gbc_lblY = new GridBagConstraints();
+			gbc_lblY.insets = new Insets(20, 150, 5, 5);
+			gbc_lblY.gridx = 6;
+			gbc_lblY.gridy = 3;
+			contentPanel.add(lblY, gbc_lblY);
+		}
+		{
 			txtY = new JTextField();
 			GridBagConstraints gbc_txtY = new GridBagConstraints();
-			gbc_txtY.insets = new Insets(0, 0, 5, 5);
+			gbc_txtY.insets = new Insets(0, 150, 5, 5);
 			gbc_txtY.fill = GridBagConstraints.HORIZONTAL;
-			gbc_txtY.gridx = 9;
-			gbc_txtY.gridy = 2;
+			gbc_txtY.gridx = 6;
+			gbc_txtY.gridy = 4;
 			contentPanel.add(txtY, gbc_txtY);
 			txtY.setColumns(10);
 		}
-		
-		btnColor = new JButton("COLOR");
-		btnColor.setForeground(Color.PINK);
-		btnColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Color outlineColor = JColorChooser.showDialog(null, "Choose outline color", btnColor.getBackground());
-				if (outlineColor != null)
-					btnColor.setBackground(outlineColor);
-			}
-
-		});
-		btnColor.setBackground(Color.BLACK);
-		GridBagConstraints gbc_btnColor = new GridBagConstraints();
-		gbc_btnColor.insets = new Insets(0, 0, 0, 5);
-		gbc_btnColor.gridx = 6;
-		gbc_btnColor.gridy = 4;
-		contentPanel.add(btnColor, gbc_btnColor);
 
 		{
 		
@@ -176,14 +158,6 @@ public class DlgPoint extends JDialog {
 
 	public void setConfirm(boolean isOk) {
 		this.isOk = isOk;
-	}
-
-	public JButton getBtnColor() {
-		return btnColor;
-	}
-
-	public void setBtnColor(JButton btnColor) {
-		this.btnColor = btnColor;
 	}
 
 	public Point getP() {

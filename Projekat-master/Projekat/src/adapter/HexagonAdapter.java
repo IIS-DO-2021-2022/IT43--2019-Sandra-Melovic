@@ -2,50 +2,50 @@ package adapter;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
-import geometry.Hexagon;
+import hexagon.Hexagon;
+import geometry.Circle;
+import geometry.Point;
 import geometry.SurfaceShape;
 
 public class HexagonAdapter extends SurfaceShape{
 	
-	private Hexagon hexagon;
-	
-	public HexagonAdapter() {
-			
-		}
-	
-	public HexagonAdapter(Hexagon hexagon) {
-		this.hexagon=hexagon;
-		
-	}
 
+	private static final long serialVersionUID = 1L;
+	private Hexagon hexagon=new Hexagon(0,0,0);
+	
+	public HexagonAdapter(int x, int y, int r, Color color, Color innerColor) {
+		this.hexagon.setX(x);
+		this.hexagon.setY(y);
+		this.hexagon.setR(r);
+		this.hexagon.setBorderColor(color);
+		this.hexagon.setAreaColor(innerColor);
+	}
 	@Override
 	public void moveTo(int x, int y) {
-		// TODO Auto-generated method stub
+		
+		Point center= new Point(hexagon.getX(), hexagon.getY());
+		center.moveTo(x, y);	
 		
 	}
 
 	@Override
 	public void moveBy(int byX, int byY) {
-		// TODO Auto-generated method stub
+		
+		Point center= new Point(hexagon.getX(), hexagon.getY());
+		center.moveBy(byX, byY);		
 		
 	}
 
 	@Override
 	public int compareTo(Object o) {
+		if(o instanceof Hexagon) {
+			return (int) (this.hexagon.getR() - ((Hexagon) o).getR());
+		}
 		return 0;
 	}
-
 	@Override
 	public double area() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void fill(Graphics g) {
-		// TODO Auto-generated method stub
-		
+		return (3 * Math.sqrt(3)*Math.pow(hexagon.getR(), 2)/2);
 	}
 
 	@Override
@@ -69,66 +69,50 @@ public class HexagonAdapter extends SurfaceShape{
 
 	@Override
 	public String toString() {
-		return  "Center: " + hexagon.getX() +hexagon.getY() + ", radius: " + hexagon.getR();
+		return "Hexagon:" + hexagon.getX() + "," + hexagon.getY() + "," + hexagon.getR() + "," + hexagon.getBorderColor().getRed()+"," + hexagon.getBorderColor().getGreen()+","+hexagon.getBorderColor().getBlue()  + "," + hexagon.getAreaColor().getRed() + "," + hexagon.getAreaColor().getGreen() + "," + hexagon.getAreaColor().getBlue();
 	}
 	
-	public int getX() {
-        return hexagon.getX();
-    }
-    
-    public void setX(final int x) {
-    	hexagon.setX(x);
-    }
-    
-    public int getY() {
-        return hexagon.getY();
-    }
-    
-    public void setY(final int y) {
-    	hexagon.setY(y);
-    }
-    
-    public int getR() {
-        return hexagon.getR();
-    }
-    
-    public void setR(final int r) {
-    	hexagon.setR(r);;
-    }
-    
-    public Color getBorderColor() {
-        return hexagon.getBorderColor();
-    }
-    
-    public Color getAreaColor() {
-        return hexagon.getAreaColor();
-    }
-    
-    public void setBorderColor(final Color borderColor) {
-    	hexagon.setBorderColor(borderColor);
-    }
-    
-    public void setAreaColor(final Color areaColor) {
-    	hexagon.setAreaColor(areaColor);
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof HexagonAdapter) {
+			HexagonAdapter temp=(HexagonAdapter) obj;
+			if (hexagon.getX() == temp.getHexagon().getX() && 
+				hexagon.getY() == temp.getHexagon().getY() &&
+				hexagon.getR() == temp.getHexagon().getR()){
+				return true;
+			}		 
+		}
+		return false;		
+	}
     
     public boolean isSelected() {
-        return hexagon.isSelected();
+    	return this.selected;
+        //return hexagon.isSelected();
     }
     
     public void setSelected(final boolean selected) {
     	hexagon.setSelected(selected);
+    	this.selected = selected;
     }
     
     public HexagonAdapter clone() {
-		HexagonAdapter hexagon2 = new HexagonAdapter();
-		hexagon2.setX(this.getX());
-		hexagon2.setY(this.getY());
-		hexagon2.setR(this.getR());
-		hexagon2.setColor(this.getColor());
-		hexagon2.setAreaColor(this.getAreaColor());
-		return hexagon2;
+
+		HexagonAdapter hexagonAdapter = new HexagonAdapter(-1,-1,-1,Color.black, Color.black);
+		
+		hexagonAdapter.getHexagon().setX(this.getHexagon().getX());
+		hexagonAdapter.getHexagon().setY(this.getHexagon().getY());
+		hexagonAdapter.getHexagon().setR(this.getHexagon().getR());
+		hexagonAdapter.getHexagon().setBorderColor(this.getHexagon().getBorderColor());
+		hexagonAdapter.getHexagon().setAreaColor(this.getHexagon().getAreaColor());
+		
+		return hexagonAdapter;
+	}
+	@Override
+	public void fill(Graphics g) {
+		// TODO Auto-generated method stub
+		
 	}
     
 
 }
+

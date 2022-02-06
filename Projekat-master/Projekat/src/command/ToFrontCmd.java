@@ -19,12 +19,16 @@ public class ToFrontCmd implements Command {
 
 	@Override
 	public void execute() {
-		Collections.swap(model.getShapes(), index+1, index);
+		if(index!=model.getShapes().size()-1) {
+			Collections.swap(model.getShapes(), index+1, index);
+		}
 	}
 
 	@Override
 	public void unexecute() {
-		Collections.swap(model.getShapes(), index, index+1);
+		if(index!=model.getShapes().size()-1) {
+			Collections.swap(model.getShapes(), index, index+1);
+		}
 	}
 	
 	@Override

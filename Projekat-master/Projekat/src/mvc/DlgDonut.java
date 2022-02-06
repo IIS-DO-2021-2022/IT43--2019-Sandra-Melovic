@@ -33,8 +33,6 @@ public class DlgDonut extends JDialog {
 	private JTextField txtInnerR;
 	public boolean isOk;
 	public Donut donut;
-	public JButton btnInnerColor;
-	public JButton btnOutlineColor;
 
 	/**
 	 * Launch the application.
@@ -73,7 +71,7 @@ public class DlgDonut extends JDialog {
 		{
 			JLabel lblX = new JLabel("Center coordinate X:");
 			GridBagConstraints gbc_lblX = new GridBagConstraints();
-			gbc_lblX.insets = new Insets(0, 0, 5, 5);
+			gbc_lblX.insets = new Insets(20, 70, 5, 5);
 			gbc_lblX.gridx = 5;
 			gbc_lblX.gridy = 1;
 			contentPanel.add(lblX, gbc_lblX);
@@ -82,7 +80,7 @@ public class DlgDonut extends JDialog {
 			JLabel lblY = new JLabel("Center coordinate Y:");
 			GridBagConstraints gbc_lblY = new GridBagConstraints();
 			gbc_lblY.gridwidth = 2;
-			gbc_lblY.insets = new Insets(0, 0, 5, 5);
+			gbc_lblY.insets = new Insets(20, 70, 5, 5);
 			gbc_lblY.gridx = 10;
 			gbc_lblY.gridy = 1;
 			contentPanel.add(lblY, gbc_lblY);
@@ -90,7 +88,7 @@ public class DlgDonut extends JDialog {
 		{
 			txtX = new JTextField();
 			GridBagConstraints gbc_txtX = new GridBagConstraints();
-			gbc_txtX.insets = new Insets(0, 0, 5, 5);
+			gbc_txtX.insets = new Insets(0, 70, 5, 5);
 			gbc_txtX.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtX.gridx = 5;
 			gbc_txtX.gridy = 2;
@@ -100,7 +98,7 @@ public class DlgDonut extends JDialog {
 		{
 			txtY = new JTextField();
 			GridBagConstraints gbc_txtY = new GridBagConstraints();
-			gbc_txtY.insets = new Insets(0, 0, 5, 5);
+			gbc_txtY.insets = new Insets(0, 70, 5, 5);
 			gbc_txtY.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtY.gridx = 10;
 			gbc_txtY.gridy = 2;
@@ -110,7 +108,7 @@ public class DlgDonut extends JDialog {
 		{
 			JLabel lblR = new JLabel("Radius:");
 			GridBagConstraints gbc_lblR = new GridBagConstraints();
-			gbc_lblR.insets = new Insets(0, 0, 5, 5);
+			gbc_lblR.insets = new Insets(20, 70, 5, 5);
 			gbc_lblR.gridx = 5;
 			gbc_lblR.gridy = 4;
 			contentPanel.add(lblR, gbc_lblR);
@@ -118,7 +116,7 @@ public class DlgDonut extends JDialog {
 		{
 			JLabel lblInnerR = new JLabel("Inner radius:");
 			GridBagConstraints gbc_lblInnerR = new GridBagConstraints();
-			gbc_lblInnerR.insets = new Insets(0, 0, 5, 5);
+			gbc_lblInnerR.insets = new Insets(20, 70, 5, 5);
 			gbc_lblInnerR.gridx = 10;
 			gbc_lblInnerR.gridy = 4;
 			contentPanel.add(lblInnerR, gbc_lblInnerR);
@@ -126,7 +124,7 @@ public class DlgDonut extends JDialog {
 		{
 			txtR = new JTextField();
 			GridBagConstraints gbc_txtR = new GridBagConstraints();
-			gbc_txtR.insets = new Insets(0, 0, 5, 5);
+			gbc_txtR.insets = new Insets(0, 70, 5, 5);
 			gbc_txtR.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtR.gridx = 5;
 			gbc_txtR.gridy = 5;
@@ -136,49 +134,13 @@ public class DlgDonut extends JDialog {
 		{
 			txtInnerR = new JTextField();
 			GridBagConstraints gbc_txtInnerR = new GridBagConstraints();
-			gbc_txtInnerR.insets = new Insets(0, 0, 5, 5);
+			gbc_txtInnerR.insets = new Insets(0, 70, 5, 5);
 			gbc_txtInnerR.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtInnerR.gridx = 10;
 			gbc_txtInnerR.gridy = 5;
 			contentPanel.add(txtInnerR, gbc_txtInnerR);
 			txtInnerR.setColumns(10);
 		}
-		
-				btnOutlineColor = new JButton("Outline Color");
-				btnOutlineColor.setForeground(Color.PINK);
-				btnOutlineColor.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						Color outlineColor = JColorChooser.showDialog(null, "Choose outline color",
-								btnOutlineColor.getBackground());
-						if (outlineColor != null)
-							btnOutlineColor.setBackground(outlineColor);
-
-					}
-				});
-						
-						btnInnerColor = new JButton("Inner Color");
-						btnInnerColor.setForeground(Color.PINK);
-						btnInnerColor.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								Color innerColor = JColorChooser.showDialog(null, "Choose inner color", btnInnerColor.getBackground());
-								if (innerColor != null)
-									btnInnerColor.setBackground(innerColor);
-
-							}
-						});
-						btnInnerColor.setBackground(Color.BLACK);
-						GridBagConstraints gbc_btnInnerColor = new GridBagConstraints();
-						gbc_btnInnerColor.insets = new Insets(0, 0, 5, 5);
-						gbc_btnInnerColor.gridx = 3;
-						gbc_btnInnerColor.gridy = 7;
-						contentPanel.add(btnInnerColor, gbc_btnInnerColor);
-				
-						btnOutlineColor.setBackground(Color.BLACK);
-						GridBagConstraints gbc_btnOutlineColor = new GridBagConstraints();
-						gbc_btnOutlineColor.insets = new Insets(0, 0, 0, 5);
-						gbc_btnOutlineColor.gridx = 3;
-						gbc_btnOutlineColor.gridy = 8;
-						contentPanel.add(btnOutlineColor, gbc_btnOutlineColor);
 
 		{
 			JPanel buttonPane = new JPanel();
@@ -256,22 +218,5 @@ public class DlgDonut extends JDialog {
 	public void setDonut(Donut donut) {
 		this.donut = donut;
 	}
-
-	public JButton getBtnInnerColor() {
-		return btnInnerColor;
-	}
-
-	public void setBtnInnerColor(JButton btnInnerColor) {
-		this.btnInnerColor = btnInnerColor;
-	}
-
-	public JButton getBtnOutlineColor() {
-		return btnOutlineColor;
-	}
-
-	public void setBtnOutlineColor(JButton btnOutlineColor) {
-		this.btnOutlineColor = btnOutlineColor;
-	}
-
 
 }

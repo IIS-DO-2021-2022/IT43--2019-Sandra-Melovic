@@ -2,9 +2,14 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
-public class Rectangle extends SurfaceShape{
+public class Rectangle extends SurfaceShape implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Point upperLeft;
 	private int width;
 	private int height;
@@ -28,7 +33,7 @@ public class Rectangle extends SurfaceShape{
 	public Rectangle(Point upperLeft, int width, int height, Color color, Color innerColor) {
 		this(upperLeft,width,height);
 		setColor(color);
-		setColor(innerColor);
+		setInnerColor(innerColor);
 	}
 	
 	public Rectangle(Point upperLeft, int height, int width, boolean selected, Color color) {
@@ -96,7 +101,9 @@ public class Rectangle extends SurfaceShape{
 	
 	@Override
 	public String toString() {
-		return "Upper left point: " + upperLeft + ", width: " + width + ", height: " + height;
+		setInnerColor(getInnerColor());
+		return "Rectangle" + ":" +  getUpperLeft().getX()+ ","+ getUpperLeft().getY()+ "," + getWidth() + "," + getHeight() + "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue()  + "," + getInnerColor().getRed() + "," + getInnerColor().getGreen() + "," + getInnerColor().getBlue();
+		//return "Rectangle: x=" + upperLeft.getX() + "; y=" + upperLeft.getY() + "; height=" + height + "; width=" + width + "; edge color=" + getColor().toString().substring(14).replace('=', '-') + "; area color=" + getInnerColor().toString().substring(14).replace('=', '-');
 	}
 	
 	@Override

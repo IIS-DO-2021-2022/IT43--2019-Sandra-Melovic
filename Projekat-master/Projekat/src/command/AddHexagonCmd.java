@@ -25,5 +25,10 @@ public class AddHexagonCmd implements Command {
 		model.remove(hexagon);
 
 	}
+	
+	@Override
+	public String toString() {
+		return "Added->" + hexagon.toString();
+	}
 
 }

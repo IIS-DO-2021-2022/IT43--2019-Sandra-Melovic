@@ -25,4 +25,8 @@ public class AddDonutCmd implements Command {
 		model.remove(donut);
 
 }
+	@Override
+	public String toString() {
+		return "Added->" + donut.toString();
+	}
 }

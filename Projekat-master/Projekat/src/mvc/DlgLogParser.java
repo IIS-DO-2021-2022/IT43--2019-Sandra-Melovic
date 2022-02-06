@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -13,8 +12,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-
-import org.w3c.dom.events.MouseEvent;
 
 import strategy.FileLog;
 
@@ -26,6 +23,7 @@ public class DlgLogParser extends JDialog {
 	private JList<String> activityLog;
 	private DefaultListModel<String> log;
 	private FileLog fileLog;
+	public boolean next=false;
 	
 	public static void main(String[] args) {
 		try {
@@ -71,8 +69,14 @@ public class DlgLogParser extends JDialog {
 				
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						if (fileLog != null) fileLog.readLine(log.getElementAt(log.size() - 1));
-						
+						if (fileLog != null) 
+						{
+							if(log.getElementAt(log.size() - 1) == null) {
+								dispose();
+							} else {
+								fileLog.execute(log.getElementAt(log.size() - 1));
+							}
+						}
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -115,5 +119,15 @@ public class DlgLogParser extends JDialog {
 	public void setFileLog(FileLog fileLog) {
 		this.fileLog = fileLog;
 	}
+
+	public boolean isNext() {
+		return next;
+	}
+
+	public void setNext(boolean next) {
+		this.next = next;
+	}
+	
+	
 
 }

@@ -1,6 +1,5 @@
-/mvc/
-/command/
-/geometry/
 /adapter/
-/observer/
+/mvc/
 /strategy/
+/observer/
+/command/

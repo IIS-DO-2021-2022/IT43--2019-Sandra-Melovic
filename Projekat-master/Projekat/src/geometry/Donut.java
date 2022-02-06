@@ -4,12 +4,17 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.io.Serializable;
 import java.awt.geom.Area;
 import java.awt.Shape;
 
 
-public class Donut extends Circle {
+public class Donut extends Circle implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int innerR;
 	
 	
@@ -35,26 +40,45 @@ public class Donut extends Circle {
 	public Donut(Point center, int r, int innerR, boolean selected, Color color, Color innerColor) { 
 		this(center, r, innerR, selected, color);
 		setInnerColor(innerColor);
-		setSelected(selected);
+	}
+	
+	public Donut(Point center, int r, int innerR, Color color, Color innerColor) { 
+		this(center, r, innerR);
+		setColor(color);
+		setInnerColor(innerColor);
 	}
 	
 	
-	
+	/*
 	public void fill(Graphics g) {
 		g.setColor(getInnerColor());
+		System.out.println("u fillu");
 		super.fill(g);
-		g.setColor(Color.WHITE);
 		g.fillOval(getCenter().getX() - this.innerR, getCenter().getY() - this.innerR, this.innerR * 2, this.innerR * 2);
+	}*/
+	
+	private void fill(Graphics g, Color innerColor, Area donut) {
+		Graphics2D graphics2d = (Graphics2D) g;
+		graphics2d.setColor(innerColor);
+		graphics2d.fill(donut);
+		
+	}
+	
+	private void colorOutline(Graphics g, Color outlineColor, Area donut) {
+		Graphics2D graphics2d = (Graphics2D) g;
+		graphics2d.setColor(outlineColor);
+		graphics2d.draw(donut);
+		
 	}
 	
 	@Override
-	public void draw(Graphics gr) {
-		Graphics2D g = (Graphics2D)gr.create();
-		 Shape donut= drawDonut();
-		 
-		  g.setColor(getInnerColor());
-	        g.fill(donut);
-	        g.setColor(getColor());
+	public void draw(Graphics g) {
+		Area donut = drawDonut();
+		
+		this.fill(g, getInnerColor(), donut);
+		
+		this.colorOutline(g, getColor(), donut);
+	        
 		 
 		if (selected) {
 			g.setColor(Color.BLUE);
@@ -66,7 +90,7 @@ public class Donut extends Circle {
 		}
 	}
 	
-	public Shape drawDonut() {
+	public Area drawDonut() {
 		Shape out = new Ellipse2D.Double(getCenter().getX() - getR(),
 				 getCenter().getY() - getR(),
 				 getR()*2, 
@@ -100,7 +124,8 @@ public class Donut extends Circle {
 	
 	@Override
 	public String toString() {
-		return super.toString() + ", inner radius = " + innerR;
+		return "Donut" + ":" +  getCenter().getX()+ ","+ getCenter().getY()+ "," + getR() + "," + getInnerR() + "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue()  + "," + getInnerColor().getRed() + "," + getInnerColor().getGreen() + "," + getInnerColor().getBlue();
+		//return "Donut: radius=" + getR() + "; x=" + getCenter().getX() + "; y=" + getCenter().getY() + "; edge color=" + getColor().toString().substring(14).replace('=', '-') + "; area color=" + getInnerColor().toString().substring(14).replace('=', '-') + "; inner radius=" + innerR;
 	}
 	
 	@Override

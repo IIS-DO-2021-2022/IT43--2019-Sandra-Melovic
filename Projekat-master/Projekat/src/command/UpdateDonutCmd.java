@@ -38,7 +38,7 @@ public class UpdateDonutCmd implements Command {
 			e.printStackTrace();
 		}
 		try {
-			oldState.setR(newState.getR());
+			oldState.setInnerRadius(newState.getInnerR());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -55,7 +55,7 @@ public class UpdateDonutCmd implements Command {
 			e.printStackTrace();
 		}
 		try {
-			oldState.setR(original.getR());
+			oldState.setInnerRadius(original.getInnerR());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

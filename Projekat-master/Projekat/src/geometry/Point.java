@@ -2,10 +2,14 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics;
+import java.io.Serializable;
 
-public class Point extends Shape{
+public class Point extends Shape implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int x;
 	private int y;
 	
@@ -74,7 +78,8 @@ public class Point extends Shape{
 	
 	@Override
 	public String toString() {
-		return "(" + x + ", " + y + ")";
+		return "Point" + ":" +  getX()+ ","+ getY()+ "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue();
+		//return "Point: x=" + x + "; y=" + y + "; color=" + getColor().toString().substring(14).replace('=', '-');
 	}
 	
 	@Override

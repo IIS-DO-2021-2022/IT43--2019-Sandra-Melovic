@@ -3,13 +3,9 @@ package strategy;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import javax.swing.DefaultListModel;
-
 import adapter.HexagonAdapter;
 import command.AddCircleCmd;
 import command.AddDonutCmd;
@@ -17,9 +13,13 @@ import command.AddHexagonCmd;
 import command.AddLineCmd;
 import command.AddPointCmd;
 import command.AddRectangleCmd;
+import command.BringToBackCmd;
+import command.BringToFrontCmd;
 import command.DeselectCmd;
 import command.RemoveShapeCmd;
 import command.SelectCmd;
+import command.ToBackCmd;
+import command.ToFrontCmd;
 import command.UpdateCircleCmd;
 import command.UpdateDonutCmd;
 import command.UpdateHexagonCmd;
@@ -28,7 +28,6 @@ import command.UpdatePointCmd;
 import command.UpdateRectangleCmd;
 import geometry.Circle;
 import geometry.Donut;
-import geometry.Hexagon;
 import geometry.Line;
 import geometry.Point;
 import geometry.Rectangle;
@@ -40,260 +39,354 @@ import mvc.DrawingModel;
 
 public class FileLog implements FileChooser{
 	
-	private BufferedWriter writer;
 	private BufferedReader reader;
 	private DrawingFrame frame;
 	private DrawingModel model;
 	private DrawingController controller;
 	private DlgLogParser logParser;
-	
-	private Point point;
-	private Line line;
-	private Circle circle;
+	public Donut donut;
+	public HexagonAdapter hexagonAdapter;
+	private String commands;
 	
 	public FileLog(DrawingFrame frame, DrawingModel model, DrawingController controller) {
 		this.frame = frame;
-		this.model = model; 
+		this.model = model;
 		this.controller = controller;
 	}
+	
+	public FileLog() {
+		
+	}
 
-	/**
-	 * Save forwarded file as log of commands.
-	 */
+
 	@Override
-	public void save(File file) {
+	public void save(String filePath) {
 		try {
-			writer = new BufferedWriter(new FileWriter(file + ".log"));
-			DefaultListModel<String> list = frame.getList();
-			for (int i = 0; i < frame.getList().size(); i++) {
-				writer.write(list.getElementAt(i));
-				writer.newLine();
-			}
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
-		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+			writer.write(commands);
 			writer.close();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
 	}
-	/**
-	 * Open forwarded log file and execute it command by command in interaction with user.
-	 */
+	
 	@Override
-	public void open(File file) {
+	public void open(String filePath) {
 		try {
-			reader = new BufferedReader(new FileReader(file));
+			
+			reader = new BufferedReader(new FileReader(filePath));
 			logParser = new DlgLogParser();
 			logParser.setFileLog(this);
-			logParser.addCommand(reader.readLine());
+			String text = "";
+			text = reader.readLine();
+			logParser.addCommand(text);
 			logParser.setVisible(true);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
 	
-	
-	public void readLine(String command) {
+	public void execute(String line) {
+		String [] result =line.split("->");
+		String command= result[0];
+		String [] result2 = result[1].split(":");
+		String shape= result2[0];
 		try {
-			String[] commands = command.split("->");
-			switch(commands[0]) {
-				case "Added":
-					Shape shape = parseShape(commands[1].split(":")[0], commands[1].split(":")[1]);
-					if(commands[1].split(":")[0].equals("Donut")) {
-						controller.executeCommand(new AddDonutCmd((Donut)shape,model));				
-					}
-					else if(commands[1].split(":")[0].equals("Circle")) {
-						 circle =  (Circle) shape;
-						controller.executeCommand(new AddCircleCmd(circle,model));
-					}
-					else if(commands[1].split(":")[0].equals("Hexagon")) {
-						controller.executeCommand(new AddHexagonCmd((HexagonAdapter)shape,model));
-					}
-					else if(commands[1].split(":")[0].equals("Line")) {
-						 line =  (Line) shape;
-						controller.executeCommand(new AddLineCmd(line,model));
-					}
-					else if(commands[1].split(":")[0].equals("Point")) {
-						 point =  (Point) shape;
-						controller.executeCommand(new AddPointCmd(point,model));
-					}
+			if (command.equals("Added"))
+			{
+				if (shape.equals("Point"))
+				{
+					Point p = (Point) parseShape(result2[1],shape);
+					AddPointCmd  addPointCmd = new AddPointCmd(p, model);
+					addPointCmd.execute();
+					frame.getList().addElement(addPointCmd.toString());
+					model.pushToUndoStack(addPointCmd);
 					
-					else if(commands[1].split(":")[0].equals("Rectangle")) {
-						controller.executeCommand(new AddRectangleCmd((Rectangle)shape,model));
+				} else if (shape.equals("Line")) {
+					
+					Line l = (Line) parseShape(result2[1],shape);
+					AddLineCmd  addLineCmd = new AddLineCmd(l, model);
+					addLineCmd.execute();
+					frame.getList().addElement(addLineCmd.toString());
+					model.pushToUndoStack(addLineCmd);
+					
+				} else if (shape.equals("Rectangle")) {
+					
+					Rectangle r = (Rectangle) parseShape(result2[1],shape);
+					AddRectangleCmd  addRectangleCmd = new AddRectangleCmd(r, model);
+					addRectangleCmd.execute();
+					frame.getList().addElement(addRectangleCmd.toString());
+					model.pushToUndoStack(addRectangleCmd);
+					
+				} else if (shape.equals("Circle")) {
+					
+					Circle c = (Circle) parseShape(result2[1],shape);
+					AddCircleCmd  addCircleCmd = new AddCircleCmd(c, model);
+					addCircleCmd.execute();
+					frame.getList().addElement(addCircleCmd.toString());
+					model.pushToUndoStack(addCircleCmd);
+					
+				} else if (shape.equals("Donut")) {
+					
+					Donut d = (Donut) parseShape(result2[1],shape);
+					AddDonutCmd  addDonutCmd = new AddDonutCmd(d, model);
+					addDonutCmd.execute();
+					frame.getList().addElement(addDonutCmd.toString());
+					model.pushToUndoStack(addDonutCmd);
+					
+				} else if (shape.equals("Hexagon")) {
+					
+					HexagonAdapter h = (HexagonAdapter) parseShape(result2[1],shape);
+					AddHexagonCmd  addHexagonCmd = new AddHexagonCmd(h, model);
+					addHexagonCmd.execute();
+					frame.getList().addElement(addHexagonCmd.toString());
+					model.pushToUndoStack(addHexagonCmd);
+					
+				}
+			}  else if (command.equals("Updated")) {
+				
+				String [] result3 = result[2].split(":");
+				Shape oldShape = parseShape(result2[1],shape);
+				int index = model.getIndexOf(oldShape);
+				
+				if (shape.equals("Point"))
+				{
+					Point newPoint = (Point) parseShape(result3[1],shape);
+					UpdatePointCmd  updatePointCmd = new UpdatePointCmd((Point) model.getByIndex(index), newPoint);
+					updatePointCmd.execute();
+					frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newPoint.toString());
+					model.pushToUndoStack(updatePointCmd);
+					
+				} else if (shape.equals("Line")) {
+					
+					Line newLine = (Line) parseShape(result3[1],shape);
+					UpdateLineCmd  updateLineCmd = new UpdateLineCmd((Line) model.getByIndex(index), newLine);
+					updateLineCmd.execute();
+					frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newLine.toString());
+					model.pushToUndoStack(updateLineCmd);
+					
+				} else if (shape.equals("Rectangle")) {
+					
+					Rectangle newRectangle = (Rectangle) parseShape(result3[1],shape);
+					UpdateRectangleCmd  updateRectangleCmd = new UpdateRectangleCmd((Rectangle) model.getByIndex(index), newRectangle);
+					updateRectangleCmd.execute();
+					frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newRectangle.toString());
+					model.pushToUndoStack(updateRectangleCmd);
+					
+				} else if (shape.equals("Circle")) {
+					
+					Circle newCircle = (Circle) parseShape(result3[1],shape);
+					UpdateCircleCmd  updateCircleCmd = new UpdateCircleCmd((Circle) model.getByIndex(index), newCircle);
+					updateCircleCmd.execute();
+					frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newCircle.toString());
+					model.pushToUndoStack(updateCircleCmd);
+
+					
+				} else if (shape.equals("Donut")) {
+					
+					Donut newDonut = (Donut) parseShape(result3[1],shape);
+					UpdateDonutCmd  updateDonutCmd = new UpdateDonutCmd((Donut) model.getByIndex(index), newDonut);
+					updateDonutCmd.execute();
+					frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newDonut.toString());
+					model.pushToUndoStack(updateDonutCmd);
+					
+				} else if (shape.equals("Hexagon")) {
+					
+					HexagonAdapter newHexagon = (HexagonAdapter) parseShape(result3[1],shape);
+					UpdateHexagonCmd  updateHexagonCmd = new UpdateHexagonCmd((HexagonAdapter) model.getByIndex(index), newHexagon);
+					updateHexagonCmd.execute();
+					frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newHexagon.toString());
+					model.pushToUndoStack(updateHexagonCmd);
+					
+				}
+				
+			} else if (command.equals("Deleted")){
+				
+				while (model.getSelectedShapes().size() != 0) {
+					Shape removeShape = parseShape(result2[1],shape);
+					RemoveShapeCmd  removeShapeCmd = new RemoveShapeCmd(model, model.getSelectedShapes().get(0));
+					frame.getList().addElement("Deleted->" + removeShape.toString());
+					removeShapeCmd.execute();
+					model.pushToUndoStack(removeShapeCmd);
+				}
+				
+			} else if (command.equals("Selected")){
+				
+				Shape selectedShape = parseShape(result2[1], shape);
+				for (int i = 0; i < model.getShapes().size(); i++) {
+					if (selectedShape.equals(model.getShapes().get(i))) {
+						selectedShape = model.getShapes().get(i);
+						SelectCmd cmdSelect = new SelectCmd(model, selectedShape);
+						cmdSelect.execute();
+						frame.getList().addElement("Selected->" + selectedShape.toString());
+						model.pushToUndoStack(cmdSelect);
 					}
-					frame.getList().addElement("Added->" + shape.toString());
-					break;				
-				case "Updated":
-					Shape oldShape = parseShape(commands[1].split(":")[0], commands[1].split(":")[1]);
-					int index = model.getIndexOf(oldShape);
-					if (oldShape instanceof Point) {
-						Point newPoint = parsePoint(commands[2].split(":")[1]);
-						UpdatePointCmd updatePointCmd= (new UpdatePointCmd((Point) model.getByIndex(index), newPoint));
-						frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newPoint.toString());
+				}				
+			} else if (command.equals("Deselected")){
+				
+				Shape deselectedShape = parseShape(result2[1], shape);
+				for (int i = 0; i < model.getShapes().size(); i++) {
+					if (deselectedShape.equals(model.getShapes().get(i))) {
+						deselectedShape = model.getShapes().get(i);
+						DeselectCmd cmdDeselect = new DeselectCmd(model, deselectedShape);
+						cmdDeselect.execute();
+						frame.getList().addElement("Deelected->" + deselectedShape.toString());
+						model.pushToUndoStack(cmdDeselect);
 					}
-					else if (oldShape instanceof Line) {
-						Line newLine = parseLine(commands[2].split(":")[1]);
-						controller.executeCommand(new UpdateLineCmd((Line) model.getByIndex(index), newLine));
-						frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newLine.toString());
-					}
-					else if (oldShape instanceof Rectangle) {
-						Rectangle newRectangle = parseRectangle(commands[2].split(":")[1]);
-						controller.executeCommand(new UpdateRectangleCmd((Rectangle) model.getByIndex(index), newRectangle));
-						frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newRectangle.toString());
-					}
-					else if (oldShape instanceof Donut) {
-						Donut newDonut = parseDonut(commands[2].split(":")[1]);
-						controller.executeCommand(new UpdateDonutCmd((Donut) model.getByIndex(index), newDonut));
-						frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newDonut.toString());
-					}
-					else if (oldShape instanceof Circle) {
-						Circle newCircle = parseCircle(commands[2].split(":")[1]);
-						controller.executeCommand(new UpdateCircleCmd((Circle) model.getByIndex(index), newCircle));
-						frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newCircle.toString());
-					}
-					else if (oldShape instanceof HexagonAdapter) {
-						HexagonAdapter newHexagon = parseHexagon(commands[2].split(":")[1]);
-						controller.executeCommand(new UpdateHexagonCmd((HexagonAdapter) model.getByIndex(index), newHexagon));
-						frame.getList().addElement("Updated->" + oldShape.toString() + "->" + newHexagon.toString());
-					}
-					break;
-				case "Deleted":
-					controller.delete();
-					break;
-			/*	case "Moved to front":
-					Shape shapeMovedToFront = parseShape(commands1[1].split(":")[0], commands1[1].split(":")[1]);
-					controller.executeCommand(new CmdToFront(model, shapeMovedToFront));
-					frame.getList().addElement("Moved to front->" + shapeMovedToFront.toString());
-					break;
-				case "Moved to back":
-					Shape shapeMovedToBack = parseShape(commands1[1].split(":")[0], commands1[1].split(":")[1]);
-					controller.executeCommand(new CmdToBack(model, shapeMovedToBack));
-					frame.getList().addElement("Moved to back->" + shapeMovedToBack.toString());
-					break;
-				case "Bringed to front":
-					Shape shapeBringedToFront = parseShape(commands1[1].split(":")[0], commands1[1].split(":")[1]);
-					controller.executeCommand(new CmdBringToFront(model, shapeBringedToFront, model.getAll().size() - 1));
-					frame.getList().addElement("Bringed to front->" + shapeBringedToFront.toString());
-					break;
-				case "Bringed to back":
-					Shape shapeBringedToBack = parseShape(commands1[1].split(":")[0], commands1[1].split(":")[1]);
-					controller.executeCommand(new CmdBringToBack(model, shapeBringedToBack));
-					frame.getList().addElement("Bringed to back->" + shapeBringedToBack.toString());
-					break;
-					*/
-				case "Selected":
-					Shape selectedShape = parseShape(commands[1].split(":")[0], commands[1].split(":")[1]);
-					controller.executeCommand(new SelectCmd(model,selectedShape));
-					frame.getList().addElement("Selected->" + selectedShape.toString());
-					break;
-				case "Unselected":
-					Shape unselectedShape = parseShape(commands[1].split(":")[0], commands[1].split(":")[1]);
-					controller.executeCommand(new DeselectCmd(model,unselectedShape));
-					frame.getList().addElement("Selected->" + unselectedShape.toString());
-					break;
-				case "Undo":
-					controller.undo();
-					break;
-				case "Redo":
-					controller.redo();
-					break;
+				}		
+				
+			} else if (command.equals("Bring to front")){
+				
+				Shape bringToFrontShape = parseShape(result2[1], shape);
+				BringToFrontCmd bringToFrontCmd = new BringToFrontCmd(model, bringToFrontShape);
+				bringToFrontCmd.execute();
+				frame.getList().addElement("Bring to front->" + bringToFrontShape.toString());
+				model.pushToUndoStack(bringToFrontCmd);
+				
+			} else if (command.equals("Bring to back")){
+				
+				Shape bringToBackShape = parseShape(result2[1], shape);
+				BringToBackCmd bringTobackCmd = new BringToBackCmd(model, bringToBackShape, model.getIndexOf(bringToBackShape));
+				bringTobackCmd.execute();
+				frame.getList().addElement("Bring to back->" + bringToBackShape.toString());
+				model.pushToUndoStack(bringTobackCmd);
+							
+			} else if (command.equals("To front")){
+				
+				Shape toFrontShape = parseShape(result2[1], shape);
+				ToFrontCmd toFrontCmd = new ToFrontCmd(model, model.getIndexOf(toFrontShape), toFrontShape);
+				toFrontCmd.execute();
+				frame.getList().addElement("Bring to front->" + toFrontShape.toString());
+				model.pushToUndoStack(toFrontCmd);
+				
+			} else if (command.equals("To back")){
+				
+				Shape toBackShape = parseShape(result2[1], shape);
+				ToBackCmd tobackCmd = new ToBackCmd(model, model.getIndexOf(toBackShape), toBackShape);
+				tobackCmd.execute();
+				frame.getList().addElement("Bring to back->" + toBackShape.toString());
+				model.pushToUndoStack(tobackCmd);
+				
+			} else if (command.equals("Undo")){
+				
+				controller.undo();
+				
+			} else if (command.equals("Redo")){
+				
+				controller.redo();
+			
 			}
-		
-			String line = reader.readLine();
-			if (line != null) logParser.addCommand(line);
+			frame.getView().repaint();
+			String read = reader.readLine();
+			if (read != null) 
+				logParser.addCommand(read);
 			else {
 				logParser.closeDialog();
 				return;
 			}
-		} catch (Exception e) {
+		} catch (Exception e){
 			System.out.println(e.getMessage());
 		}
 	}
-	
-
-	private Shape parseShape(String shape, String shapeParameters) throws Exception {
-		if (shape.equals("Point")) return parsePoint(shapeParameters);
-		else if (shape.equals("Hexagon")) return parseHexagon(shapeParameters);
-		else if (shape.equals("Line")) return parseLine(shapeParameters);
-		else if (shape.equals("Circle")) return parseCircle(shapeParameters);
-		else if (shape.equals("Rectangle")) return parseRectangle(shapeParameters);
-		else return parseDonut(shapeParameters);
-	}
 
 	
-	private Point parsePoint(String string) {
-		String [] pointParts = string.split(";"); 		
-		String s = pointParts[2].split("=")[1].substring(1, pointParts[2].split("=")[1].length() - 1);
-		String [] colors = s.split(",");
-		return new Point(Integer.parseInt(pointParts[0].split("=")[1]), Integer.parseInt(pointParts[1].split("=")[1]), new Color(Integer.parseInt(colors[0].split("-")[1]), Integer.parseInt(colors[1].split("-")[1]), Integer.parseInt(colors[2].split("-")[1])));
+	private Shape parseShape(String result, String shapeName)
+	{
+		Shape shape=null;
+		String[] prpShape = result.split(",");
+		if(shapeName.equals("Point"))
+		{
+			int x =Integer.parseInt(prpShape[0]) ;
+			int y= Integer.parseInt(prpShape[1]);
+			int r=Integer.parseInt(prpShape[2]);
+			int g= Integer.parseInt(prpShape[3]);
+			int b= Integer.parseInt(prpShape[4]);
+			
+			shape= new Point(x,y,new Color(r,g,b));
+			
+		} else if (shapeName.equals("Line")) {
+			
+			int x1 =Integer.parseInt(prpShape[0]);
+			int y1= Integer.parseInt(prpShape[1]);
+			int x2 =Integer.parseInt(prpShape[2]) ;
+			int y2= Integer.parseInt(prpShape[3]);
+			int r=Integer.parseInt(prpShape[4]);
+			int g= Integer.parseInt(prpShape[5]);
+			int b= Integer.parseInt(prpShape[6]);
+			
+			shape = new Line(new Point(x1,y1), new Point(x2,y2), new Color(r, g, b));
+			
+		} else if (shapeName.equals("Rectangle")) {
+			
+			int x =Integer.parseInt(prpShape[0]) ;
+			int y= Integer.parseInt(prpShape[1]);
+			int width =Integer.parseInt(prpShape[2]) ;
+			int height = Integer.parseInt(prpShape[3]);
+					
+			int r1=Integer.parseInt(prpShape[4]);
+			int g1= Integer.parseInt(prpShape[5]);
+			int b1= Integer.parseInt(prpShape[6]);
+			
+			int r2=Integer.parseInt(prpShape[7]);
+			int g2= Integer.parseInt(prpShape[8]);
+			int b2= Integer.parseInt(prpShape[9]);
+			shape =new Rectangle(new Point(x,y), width,height, new Color(r1, g1, b1), new Color(r2, g2, b2));
+			
+		} else if (shapeName.equals("Circle")) {
+			
+			int x =Integer.parseInt(prpShape[0]) ;
+			int y= Integer.parseInt(prpShape[1]);
+			int r=Integer.parseInt(prpShape[2]);
+			
+			int r1=Integer.parseInt(prpShape[3]);
+			int g1= Integer.parseInt(prpShape[4]);
+			int b1= Integer.parseInt(prpShape[5]);
+			
+			int r2=Integer.parseInt(prpShape[6]);
+			int g2= Integer.parseInt(prpShape[7]);
+			int b2= Integer.parseInt(prpShape[8]);
+			
+			shape = new Circle(new Point(x,y), r, new Color(r1,g1,b1), new Color(r2, g2, b2));
+			
+		} else if (shapeName.equals("Donut")) {
+			
+			int x =Integer.parseInt(prpShape[0]) ;
+			int y= Integer.parseInt(prpShape[1]);
+			int r=Integer.parseInt(prpShape[2]);
+			int inR = Integer.parseInt(prpShape[3]);
+			
+			int r1=Integer.parseInt(prpShape[4]);
+			int g1= Integer.parseInt(prpShape[5]);
+			int b1= Integer.parseInt(prpShape[6]);
+			
+			int r2=Integer.parseInt(prpShape[7]);
+			int g2= Integer.parseInt(prpShape[8]);
+			int b2= Integer.parseInt(prpShape[9]);
+			
+			shape=  new Donut(new Point(x,y), r, inR, new Color(r1, g1, b1), new Color(r2, g2, b2));
+			
+		} else if (shapeName.equals("Hexagon")) {
+			
+			int x =Integer.parseInt(prpShape[0]) ;
+			int y= Integer.parseInt(prpShape[1]);
+			int r=Integer.parseInt(prpShape[2]);
+			
+			int r1=Integer.parseInt(prpShape[3]);
+			int g1= Integer.parseInt(prpShape[4]);
+			int b1= Integer.parseInt(prpShape[5]);
+			
+			int r2=Integer.parseInt(prpShape[6]);
+			int g2= Integer.parseInt(prpShape[7]);
+			int b2= Integer.parseInt(prpShape[8]);
+			
+			shape = new HexagonAdapter(x, y, r, new Color(r1, g1, b1), new Color(r2, g2, b2));
+			
+		}
+		return shape;
 	}
 	
-	private Circle parseCircle(String string) throws NumberFormatException, Exception {
-		String [] circleParts = string.split(";"); 	
-		int radius = Integer.parseInt(circleParts[0].split("=")[1]);
-		int x = Integer.parseInt(circleParts[1].split("=")[1]);
-		int y = Integer.parseInt(circleParts[2].split("=")[1]);
-		String s = circleParts[3].split("=")[1].substring(1, circleParts[3].split("=")[1].length() - 1);
-		String [] edgeColors = s.split(",");
-		String s1 = circleParts[4].split("=")[1].substring(1, circleParts[4].split("=")[1].length() - 1);
-		String [] interiorColors = s1.split(",");
-		return new Circle(new Point(x, y), radius, false, new Color(Integer.parseInt(edgeColors[0].split("-")[1]), Integer.parseInt(edgeColors[1].split("-")[1]), Integer.parseInt(edgeColors[2].split("-")[1])), new Color(Integer.parseInt(interiorColors[0].split("-")[1]), Integer.parseInt(interiorColors[1].split("-")[1]), Integer.parseInt(interiorColors[2].split("-")[1])));
+	public void setCommands(String commands) {
+		this.commands=commands;
 	}
 	
-	private Line parseLine(String string) {
-		String [] lineParts = string.split(";"); 	
-		int xStart = Integer.parseInt(lineParts[0].split("=")[1]);
-		int yStart = Integer.parseInt(lineParts[1].split("=")[1]);
-		int xEnd = Integer.parseInt(lineParts[2].split("=")[1]);
-		int yEnd = Integer.parseInt(lineParts[3].split("=")[1]);
-		String s = lineParts[4].split("=")[1].substring(1, lineParts[4].split("=")[1].length() - 1);
-		String [] edgeColors = s.split(",");
-		Point startPoint = new Point(xStart, yStart);
-		Point endPoint = new Point(xEnd, yEnd);
-		Color lineColor = new Color(Integer.parseInt(edgeColors[0].split("-")[1]), Integer.parseInt(edgeColors[1].split("-")[1]), Integer.parseInt(edgeColors[2].split("-")[1]));
-		return new Line(startPoint, endPoint, lineColor);
-	}
-	
-	private HexagonAdapter parseHexagon(String string) throws Exception {
-		String [] hexagonParts = string.split(";"); 	
-		int radius = Integer.parseInt(hexagonParts[0].split("=")[1]);
-		int x = Integer.parseInt(hexagonParts[1].split("=")[1]);
-		int y = Integer.parseInt(hexagonParts[2].split("=")[1]);
-		String s = hexagonParts[3].split("=")[1].substring(1, hexagonParts[3].split("=")[1].length() - 1);
-		String [] edgeColors = s.split(",");
-		String s1 = hexagonParts[4].split("=")[1].substring(1, hexagonParts[4].split("=")[1].length() - 1);
-		String [] interiorColors = s1.split(",");
-		Hexagon h = new Hexagon(x, y, radius);
-		h.setBorderColor(new Color(Integer.parseInt(edgeColors[0].split("-")[1]), Integer.parseInt(edgeColors[1].split("-")[1]), Integer.parseInt(edgeColors[2].split("-")[1])));
-		h.setAreaColor(new Color(Integer.parseInt(interiorColors[0].split("-")[1]), Integer.parseInt(interiorColors[1].split("-")[1]), Integer.parseInt(interiorColors[2].split("-")[1])));
-		return new HexagonAdapter(h);
-	}
-	
-	private Donut parseDonut(String string) throws NumberFormatException, Exception {
-		String [] donutParts = string.split(";"); 	
-		int radius = Integer.parseInt(donutParts[0].split("=")[1]);
-		int x = Integer.parseInt(donutParts[1].split("=")[1]);
-		int y = Integer.parseInt(donutParts[2].split("=")[1]);
-		String s = donutParts[3].split("=")[1].substring(1, donutParts[3].split("=")[1].length() - 1);
-		String [] edgeColors = s.split(",");
-		String s1 = donutParts[4].split("=")[1].substring(1, donutParts[4].split("=")[1].length() - 1);
-		String [] interiorColors = s1.split(",");
-		int innerRadius = Integer.parseInt(donutParts[5].split("=")[1]);
-		return new Donut(new Point(x, y), radius, innerRadius,false, new Color(Integer.parseInt(edgeColors[0].split("-")[1]), Integer.parseInt(edgeColors[1].split("-")[1]), Integer.parseInt(edgeColors[2].split("-")[1])), new Color(Integer.parseInt(interiorColors[0].split("-")[1]), Integer.parseInt(interiorColors[1].split("-")[1]), Integer.parseInt(interiorColors[2].split("-")[1])));
-	}
-	
-	private Rectangle parseRectangle(String string) {
-		String [] rectangleParts = string.split(";"); 	
-		int x = Integer.parseInt(rectangleParts[0].split("=")[1]);
-		int y = Integer.parseInt(rectangleParts[1].split("=")[1]);
-		int height = Integer.parseInt(rectangleParts[2].split("=")[1]);
-		int width = Integer.parseInt(rectangleParts[3].split("=")[1]);
-		String s = rectangleParts[4].split("=")[1].substring(1, rectangleParts[4].split("=")[1].length() - 1);
-		String [] edgeColors = s.split(",");
-		String s1 = rectangleParts[5].split("=")[1].substring(1, rectangleParts[5].split("=")[1].length() - 1);
-		String [] interiorColors = s1.split(",");
-		return new Rectangle(new Point(x, y), width, height, new Color(Integer.parseInt(edgeColors[0].split("-")[1]), Integer.parseInt(edgeColors[1].split("-")[1]), Integer.parseInt(edgeColors[2].split("-")[1])), new Color(Integer.parseInt(interiorColors[0].split("-")[1]), Integer.parseInt(interiorColors[1].split("-")[1]), Integer.parseInt(interiorColors[2].split("-")[1])));
-	}
 }

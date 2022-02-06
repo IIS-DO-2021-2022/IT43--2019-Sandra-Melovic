@@ -24,5 +24,10 @@ public class AddCircleCmd implements Command {
 		model.remove(circle);
 
 	}
+	
+	@Override
+	public String toString() {
+		return "Added->" + circle.toString();
+	}
 
 }

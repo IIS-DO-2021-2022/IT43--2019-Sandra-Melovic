@@ -15,13 +15,17 @@ public class AddPointCmd implements Command {
 
 	@Override
 	public void execute() {
-		System.out.println("execute . . .");
 		model.add(point);
 	}
 
 	@Override
 	public void unexecute() {
 		model.remove(point);
+	}
+	
+	@Override
+	public String toString() {
+		return "Added->"+point.toString();
 	}
 
 }

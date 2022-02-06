@@ -1,6 +1,7 @@
 package command;
 
 import geometry.Point;
+import java.awt.Color;
 
 public class UpdatePointCmd implements Command {
 	

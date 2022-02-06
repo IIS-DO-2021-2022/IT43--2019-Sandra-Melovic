@@ -24,5 +24,10 @@ public class AddLineCmd implements Command {
 		model.remove(line);
 
 	}
+	
+	@Override
+	public String toString() {
+		return "Added->" + line.toString();
+	}
 
 }

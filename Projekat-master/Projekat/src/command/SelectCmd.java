@@ -1,5 +1,6 @@
 package command;
 
+import adapter.HexagonAdapter;
 import geometry.Shape;
 import mvc.DrawingModel;
 
@@ -16,17 +17,31 @@ public class SelectCmd implements Command{
 	@Override
 	public void execute() {
 		System.out.println("selektuj");
-		shape.setSelected(true);
-		System.out.println(shape.isSelected());
-		model.getSelectedShapes().add(shape);
+		/*if (shape instanceof HexagonAdapter) {
+			HexagonAdapter selectedHexagon=(HexagonAdapter) shape;
+			selectedHexagon.getHexagon().setSelected(true);
+			model.getSelectedShapes().add(selectedHexagon);
+		}
+		else {*/
+			shape.setSelected(true);
+			System.out.println(shape.isSelected());
+			model.getSelectedShapes().add(shape);
+		//}
 		
 	}
 
 	@Override
 	public void unexecute() {
-		shape.setSelected(false);
-		model.getSelectedShapes().remove(shape);
-		
+		/*if (shape instanceof HexagonAdapter) {
+			HexagonAdapter selectedHexagon=(HexagonAdapter) shape;
+			selectedHexagon.getHexagon().setSelected(false);
+			model.getSelectedShapes().remove(selectedHexagon);
+
+		}
+		else {*/
+			shape.setSelected(false);
+			model.getSelectedShapes().remove(shape);
+		//}
 	}
 
 }

@@ -25,7 +25,7 @@ public class BringToBackCmd implements Command {
 	}
 
 	@Override
-	public void unexecute() { // Undo 
+	public void unexecute() { 
 		model.getShapes().remove(shape);
 		model.getShapes().add(index,shape);
 
@@ -34,7 +34,7 @@ public class BringToBackCmd implements Command {
 
 
 	@Override
-	public String toString() { //For log
+	public String toString() { 
 		return "BringToBack:" + shape.toString();
 	}
 	

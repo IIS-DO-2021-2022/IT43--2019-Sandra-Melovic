@@ -7,17 +7,16 @@ public class ButtonObserver {
 	
 	private boolean deleteEnabled;
 	private boolean modifyEnabled;
-	private boolean btbEnabled;
-	private boolean btfEnabled;
+	private boolean BtBEnabled;
+	private boolean BtFEnabled;
 	private boolean toBackEnabled;
 	private boolean toFrontEnabled;
 
 	
-	//upravlja listom lister-a i prosledjuje im event
 	private PropertyChangeSupport propertyChangeSupport;
 
 	public ButtonObserver() {
-		propertyChangeSupport = new PropertyChangeSupport(this); //prihvata klasu koja ga poziva
+		propertyChangeSupport = new PropertyChangeSupport(this); 
 	}
 	
 	public void addPropertyChangeListener(PropertyChangeListener pcl) {
@@ -29,7 +28,6 @@ public class ButtonObserver {
 	}
 	
 	
-	//SETERI
 	public void setDeleteEnabled(boolean deleteEnabled) {
 		propertyChangeSupport.firePropertyChange("btnDelete", this.deleteEnabled, deleteEnabled);
 		this.deleteEnabled = deleteEnabled;
@@ -40,15 +38,15 @@ public class ButtonObserver {
 		this.modifyEnabled = modifyEnabled;
 	}
 
-	public void setBtBEnabled(boolean btbEnabled) {
-		propertyChangeSupport.firePropertyChange("btnBtB", this.btbEnabled, btbEnabled);
-		this.btbEnabled = btbEnabled;
+	public void setBtBEnabled(boolean BtBEnabled) {
+		propertyChangeSupport.firePropertyChange("btnBtB", this.BtBEnabled, BtBEnabled);
+		this.BtBEnabled = BtBEnabled;
 		
 	}
 	
 	public void setBtFEnabled(boolean btfEnabled) {
-		propertyChangeSupport.firePropertyChange("btnBtF", this.btfEnabled, btfEnabled);
-		this.btfEnabled = btfEnabled;
+		propertyChangeSupport.firePropertyChange("btnBtF", this.BtFEnabled, btfEnabled);
+		this.BtFEnabled = btfEnabled;
 		
 	}
 	public void setToBackEnabled(boolean toBackEnabled) {

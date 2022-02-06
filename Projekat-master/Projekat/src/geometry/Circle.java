@@ -2,9 +2,14 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
-public class Circle extends SurfaceShape{
+public class Circle extends SurfaceShape implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Point center;
 	private int r;
 	
@@ -26,6 +31,12 @@ public class Circle extends SurfaceShape{
 	public Circle(Point center, int r, boolean selected, Color color) {
 		this(center, r, selected);
 		setColor(color);
+	}
+	
+	public Circle(Point center, int r, Color color, Color innerColor) {
+		this(center, r);
+		setColor(color);
+		setInnerColor(innerColor);
 	}
 	
 	public Circle(Point center, int r, boolean selected, Color color, Color innerColor) {
@@ -83,7 +94,8 @@ public class Circle extends SurfaceShape{
 	
 	@Override
 	public String toString() {
-		return "Center: " + center+ ", radius: " + r;
+		return "Circle" + ":" +  getCenter().getX()+ ","+ getCenter().getY()+ "," + getR() + "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue()  + "," + getInnerColor().getRed() + "," + getInnerColor().getGreen() + "," + getInnerColor().getBlue();
+		//return "Circle: radius=" + r + "; x=" + center.getX() + "; y=" + center.getY() + "; edge color=" + getColor().toString().substring(14).replace('=', '-') + "; area color=" + getInnerColor().toString().substring(14).replace('=', '-');
 	}
 	
 	@Override

@@ -2,10 +2,7 @@ package observer;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Iterator;
 
-import javax.swing.JButton;
 
 import mvc.DrawingFrame;
 
@@ -16,9 +13,6 @@ private DrawingFrame frame;
 	public ButtonObserverUpdate(DrawingFrame frame) {
 		this.frame = frame;
 	}
-
-//	PropertyChangeEvent se salje kada se promeni vrednost propertija
-//	i prosledjuje se kao argument PropertyChangeListeneru
 	
 
 	@Override

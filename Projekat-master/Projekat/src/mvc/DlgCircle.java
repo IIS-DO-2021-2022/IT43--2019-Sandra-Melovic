@@ -33,8 +33,6 @@ public class DlgCircle extends JDialog {
 	private JTextField txtR;
 	private Circle circle;
 	private boolean isOk;
-	private JButton btnInnerColor;
-	private JButton btnOutlineColor;
 
 	/**
 	 * Launch the application.
@@ -70,28 +68,17 @@ public class DlgCircle extends JDialog {
 		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
-			JLabel lblNewLabel_2 = new JLabel("coordinate X");
+			JLabel lblNewLabel_2 = new JLabel("Coordinate X");
 			GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-			gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_2.insets = new Insets(20, 70, 5, 5);
 			gbc_lblNewLabel_2.gridx = 3;
 			gbc_lblNewLabel_2.gridy = 1;
 			contentPanel.add(lblNewLabel_2, gbc_lblNewLabel_2);
 		}
-
-		btnInnerColor = new JButton("Inner Color");
-		btnInnerColor.setForeground(Color.PINK);
-		btnInnerColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Color innerColor = JColorChooser.showDialog(null, "Choose inner color", btnInnerColor.getBackground());
-				if (innerColor != null)
-					btnInnerColor.setBackground(innerColor);
-
-			}
-		});
 		{
-			JLabel lblNewLabel_3 = new JLabel("coordinate Y");
+			JLabel lblNewLabel_3 = new JLabel("Coordinate Y");
 			GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
-			gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_3.insets = new Insets(20, 40, 5, 5);
 			gbc_lblNewLabel_3.gridx = 5;
 			gbc_lblNewLabel_3.gridy = 1;
 			contentPanel.add(lblNewLabel_3, gbc_lblNewLabel_3);
@@ -101,7 +88,7 @@ public class DlgCircle extends JDialog {
 			txtX.setTransferHandler(null);
 			
 			GridBagConstraints gbc_txtX = new GridBagConstraints();
-			gbc_txtX.insets = new Insets(0, 0, 5, 5);
+			gbc_txtX.insets = new Insets(0, 70, 5, 5);
 			gbc_txtX.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtX.gridx = 3;
 			gbc_txtX.gridy = 2;
@@ -112,7 +99,7 @@ public class DlgCircle extends JDialog {
 			txtY = new JTextField();
 			txtY.setTransferHandler(null); 
 			GridBagConstraints gbc_txtY = new GridBagConstraints();
-			gbc_txtY.insets = new Insets(0, 0, 5, 5);
+			gbc_txtY.insets = new Insets(0, 40, 5, 5);
 			gbc_txtY.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtY.gridx = 5;
 			gbc_txtY.gridy = 2;
@@ -122,7 +109,7 @@ public class DlgCircle extends JDialog {
 		{
 			JLabel lblNewLabel_4 = new JLabel("Radius");
 			GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
-			gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_4.insets = new Insets(20, 50, 5, 5);
 			gbc_lblNewLabel_4.gridx = 4;
 			gbc_lblNewLabel_4.gridy = 4;
 			contentPanel.add(lblNewLabel_4, gbc_lblNewLabel_4);
@@ -133,38 +120,13 @@ public class DlgCircle extends JDialog {
 			txtR.setTransferHandler(null);
 			
 			GridBagConstraints gbc_txtR = new GridBagConstraints();
-			gbc_txtR.insets = new Insets(0, 0, 5, 5);
+			gbc_txtR.insets = new Insets(0, 50, 5, 5);
 			gbc_txtR.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtR.gridx = 4;
 			gbc_txtR.gridy = 5;
 			contentPanel.add(txtR, gbc_txtR);
 			txtR.setColumns(10);
 		}
-		btnInnerColor.setBackground(Color.BLACK);
-		GridBagConstraints gbc_btnInnerColor = new GridBagConstraints();
-		gbc_btnInnerColor.insets = new Insets(0, 0, 5, 5);
-		gbc_btnInnerColor.gridx = 2;
-		gbc_btnInnerColor.gridy = 6;
-		contentPanel.add(btnInnerColor, gbc_btnInnerColor);
-
-		btnOutlineColor = new JButton("Outline Color");
-		btnOutlineColor.setForeground(Color.PINK);
-		btnOutlineColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Color outlineColor = JColorChooser.showDialog(null, "Choose outline color",
-						btnOutlineColor.getBackground());
-				if (outlineColor != null)
-					btnOutlineColor.setBackground(outlineColor);
-
-			}
-		});
-		btnOutlineColor.setBackground(Color.BLACK);
-		
-		GridBagConstraints gbc_btnOutlineColor = new GridBagConstraints();
-		gbc_btnOutlineColor.insets = new Insets(0, 0, 0, 5);
-		gbc_btnOutlineColor.gridx = 2;
-		gbc_btnOutlineColor.gridy = 7;
-		contentPanel.add(btnOutlineColor, gbc_btnOutlineColor);
 
 		{
 			JPanel buttonPane = new JPanel();
@@ -236,20 +198,5 @@ public class DlgCircle extends JDialog {
 		this.isOk = isOk;
 	}
 
-	public JButton getBtnInnerColor() {
-		return btnInnerColor;
-	}
-
-	public void setBtnInnerColor(JButton btnInnerColor) {
-		this.btnInnerColor = btnInnerColor;
-	}
-
-	public JButton getBtnOutlineColor() {
-		return btnOutlineColor;
-	}
-
-	public void setBtnOutlineColor(JButton btnOutlineColor) {
-		this.btnOutlineColor = btnOutlineColor;
-	}
 
 }

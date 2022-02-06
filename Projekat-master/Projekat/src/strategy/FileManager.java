@@ -4,23 +4,23 @@ import java.io.File;
 
 public class FileManager implements FileChooser {
 
-	private FileChooser fileChooser;
+	private FileChooser chooser;
 	
-	
-	public FileManager(FileChooser fileChooser) {
-		this.fileChooser = fileChooser;
-	}
 
 	@Override
-	public void save(File file) {
-		fileChooser.save(file);
+	public void save(String filePath) {
+		chooser.save(filePath);
 		
 	}
 
 	@Override
-	public void open(File file) {
-		fileChooser.open(file);
+	public void open(String filePath) {
+		chooser.open(filePath);
 		
+	}
+	
+	public void setManager(FileChooser chooser) {
+		this.chooser = chooser;
 	}
 
 }
