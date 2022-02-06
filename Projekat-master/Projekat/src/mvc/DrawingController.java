@@ -905,11 +905,13 @@ public class DrawingController implements Serializable{
 		
 		int response = fileChooser.showOpenDialog(null);
 		if (response == JFileChooser.APPROVE_OPTION) {
+			fileManager = new FileManager();
 			frame.getList().clear();
 			model.clear();
 			frame.repaint();
 			FileDraw fileDraw = new FileDraw(model,this);
-			fileDraw.open(fileChooser.getSelectedFile().getAbsolutePath());
+			fileManager.setManager(fileDraw);
+			fileManager.open(fileChooser.getSelectedFile().getAbsolutePath());
 		}
 		frame.getView().repaint();
 	}
@@ -948,7 +950,7 @@ public class DrawingController implements Serializable{
 			
 			fileLog.setCommands(command);
 			fileManager.setManager(fileLog);
-			fileLog.save(selectedFile.getAbsolutePath()+".txt");
+			fileManager.save(selectedFile.getAbsolutePath()+".txt");
 			fileDraw.setShapes(model.getShapes());
 			fileDraw.setModel(model);
 			fileManager.setManager(fileDraw);
@@ -964,11 +966,13 @@ public class DrawingController implements Serializable{
 
 		if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			try {
+				fileManager = new FileManager();
 				frame.getList().clear();
 				model.clear();
 				frame.repaint();
 				FileLog fileLog = new FileLog(frame,model,this);
-				fileLog.open(fileChooser.getSelectedFile().getAbsolutePath());
+				fileManager.setManager(fileLog);
+				fileManager.open(fileChooser.getSelectedFile().getAbsolutePath());
 			} catch (Exception ex) {				
 				System.out.println(ex.getMessage());
 			}

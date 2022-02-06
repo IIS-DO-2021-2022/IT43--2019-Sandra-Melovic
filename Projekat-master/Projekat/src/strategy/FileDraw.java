@@ -55,7 +55,6 @@ public class FileDraw implements FileChooser{
 		try {
 			fileInputStream = new FileInputStream(filePath);
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-	        model.addMultiple((ArrayList<Shape>) objectInputStream.readObject());
 	        model.setShapes((List<Shape>)objectInputStream.readObject());
 	        objectInputStream.close();
 	        fileInputStream.close();
