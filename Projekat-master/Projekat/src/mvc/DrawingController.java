@@ -119,6 +119,7 @@ public class DrawingController implements Serializable{
 				DlgPoint dialog = new DlgPoint();
 				dialog.getTxtX().setText("" + Integer.toString(oldState.getX()));
 				dialog.getTxtY().setText("" + Integer.toString(oldState.getY()));
+				dialog.getBtnBorderColor().setBackground(oldState.getColor());
 				dialog.setVisible(true);
 				if (dialog.isConfirm()) {			
 					if (dialog.getTxtX().getText().trim().isEmpty() || 
@@ -134,7 +135,8 @@ public class DrawingController implements Serializable{
 							} else {
 								Point newState = new Point(Integer.parseInt(dialog.getTxtX().getText()), 
 														   Integer.parseInt(dialog.getTxtY().getText()),
-														   getBorderColor()
+														   true,
+														   dialog.getBorderColor()
 														  );		
 								System.out.println(newState);
 								System.out.println(frame.getBorderColor());
@@ -160,6 +162,8 @@ public class DrawingController implements Serializable{
 				dialog.getTxtY().setText("" + Integer.toString(oldState.getCenter().getY()));
 				dialog.getTxtR().setText("" + Integer.toString(oldState.getR()));
 				dialog.getTxtInnerR().setText("" + Integer.toString(oldState.getInnerR()));
+				dialog.getBtnBorderColor().setBackground(oldState.getColor());
+				dialog.getBtnInnerColor().setBackground(oldState.getInnerColor());
 				dialog.setModal(true);
 				dialog.setVisible(true);
 				
@@ -187,9 +191,9 @@ public class DrawingController implements Serializable{
 													Integer.parseInt(dialog.getTxtY().getText().toString())),
 											Integer.parseInt(dialog.getTxtR().getText().toString()),
 											Integer.parseInt(dialog.getTxtInnerR().getText().toString()), 
-											false,
-											getBorderColor(), 
-											getFillColor());
+											true,
+											dialog.getBorderColor(), 
+											dialog.getInnerColor());
 									actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
 									UpdateDonutCmd updateDonutCmd = new UpdateDonutCmd(oldState, newState);
 									updateDonutCmd.execute();
@@ -218,6 +222,8 @@ public class DrawingController implements Serializable{
 				dialog.getTxtX().setText("" + Integer.toString(oldState.getCenter().getX()));
 				dialog.getTxtY().setText("" + Integer.toString(oldState.getCenter().getY()));
 				dialog.getTxtR().setText("" + Integer.toString(oldState.getR()));
+				dialog.getBtnBorderColor().setBackground(oldState.getColor());
+				dialog.getBtnInnerColor().setBackground(oldState.getInnerColor());
 				dialog.setVisible(true);
 				dialog.setModal(true);
 
@@ -242,9 +248,10 @@ public class DrawingController implements Serializable{
 										new Point(Integer.parseInt(dialog.getTxtX().getText().toString()),
 												Integer.parseInt(dialog.getTxtY().getText().toString())),
 										Integer.parseInt(dialog.getTxtR().getText().toString()), 
-										false,
-										getBorderColor(), 
-										getFillColor());
+										true,
+										dialog.getBorderColor(), 
+										dialog.getInnerColor());
+								
 								actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
 								UpdateCircleCmd updateCircleCmd = new UpdateCircleCmd(oldState, newState);
 								updateCircleCmd.execute();
@@ -264,12 +271,13 @@ public class DrawingController implements Serializable{
 
 				Line oldState = (Line) shape;
 				DlgLine dialog = new DlgLine();
-				
+		
 				System.out.println(oldState);
 				dialog.getTxtStartPointX().setText("" + Integer.toString(oldState.getStartPoint().getX()));
 				dialog.getTxtStartPointY().setText("" + Integer.toString(oldState.getStartPoint().getY()));
 				dialog.getTxtEndPointX().setText("" + Integer.toString(oldState.getEndPoint().getX()));
 				dialog.getTxtEndPointY().setText("" + Integer.toString(oldState.getEndPoint().getY()));
+				dialog.getBtnBorderColor().setBackground(oldState.getColor());
 				dialog.setVisible(true);	
 
 				if (dialog.isConfirm()) {
@@ -296,15 +304,15 @@ public class DrawingController implements Serializable{
 												Integer.parseInt(dialog.getTxtStartPointY().getText())), 
 										new Point(Integer.parseInt(dialog.getTxtEndPointX().getText()), 
 												Integer.parseInt(dialog.getTxtEndPointY().getText())), 
-										getBorderColor());
-								
-								System.out.println(newState);
-								actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
+										true,
+										   dialog.getBorderColor());
+						
 								System.out.println("stara" + oldState);
+								System.out.println("nova" + newState);
+								actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
 								UpdateLineCmd updateLineCmd = new UpdateLineCmd(oldState,newState);
-								System.out.println("jxkz" + updateLineCmd);
-								updateLineCmd.execute();
 								System.out.println(updateLineCmd);
+								updateLineCmd.execute();
 								model.pushToUndoStack(updateLineCmd);
 								frame.repaint();
 							}	
@@ -322,6 +330,8 @@ public class DrawingController implements Serializable{
 				dialog.getTxtUpperLeftY().setText("" + Integer.toString(oldState.getUpperLeft().getY()));
 				dialog.getTxtHeight().setText("" + Integer.toString(oldState.getHeight()));
 				dialog.getTxtWidth().setText("" + Integer.toString(oldState.getWidth()));
+				dialog.getBtnBorderColor().setBackground(oldState.getColor());
+				dialog.getBtnInnerColor().setBackground(oldState.getInnerColor());
 				dialog.setVisible(true);
 
 				if (dialog.isConfirm()) {
@@ -348,10 +358,9 @@ public class DrawingController implements Serializable{
 											Integer.parseInt(dialog.getTxtUpperLeftY().getText())),
 									Integer.parseInt(dialog.getTxtWidth().getText()),
 									Integer.parseInt(dialog.getTxtHeight().getText()), 
-									false,
-									getBorderColor(), 
-									getFillColor()
-									);
+									true,
+									dialog.getBorderColor(), 
+									dialog.getInnerColor());
 							
 							System.out.println("ovo je 1" + newState);
 							actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
@@ -379,8 +388,8 @@ public class DrawingController implements Serializable{
 				dialog.getTxtX().setText("" + Integer.toString(oldState.getHexagon().getX()));
 				dialog.getTxtY().setText("" + Integer.toString(oldState.getHexagon().getY()));
 				dialog.getTxtR().setText("" + Integer.toString(oldState.getHexagon().getR()));
-				//dialog.getBtnInnerColor().setBackground(oldState.getInnerColor());
-				//dialog.getBtnOutlineColor().setBackground(oldState.getColor());
+				dialog.getBtnBorderColor().setBackground(oldState.getHexagon().getBorderColor());
+				dialog.getBtnInnerColor().setBackground(oldState.getHexagon().getAreaColor());
 
 				dialog.setVisible(true);
 				System.out.println(dialog.isConfirm()+"confirm");
@@ -407,8 +416,9 @@ public class DrawingController implements Serializable{
 								HexagonAdapter newState = new HexagonAdapter(Integer.parseInt(dialog.getTxtX().getText()),
 																			Integer.parseInt(dialog.getTxtY().getText()),
 																			Integer.parseInt(dialog.getTxtR().getText()),
-																			getBorderColor(),
-																			getFillColor());
+																			true,
+																			dialog.getBorderColor(), 
+																			dialog.getInnerColor());
 								
 								System.out.println("novo stanje" + newState);
 								actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
@@ -429,7 +439,7 @@ public class DrawingController implements Serializable{
 	
 	protected Point drawPoint(MouseEvent e) {
 		
-		Point p = new Point(e.getX(), e.getY(), getBorderColor());
+		Point p = new Point(e.getX(), e.getY(), false, getBorderColor());
 		p.setSelected(false);
 		AddPointCmd addPointCmd = new AddPointCmd(p, model);
 		System.out.println("ovo: " + addPointCmd);
@@ -606,7 +616,8 @@ public class DrawingController implements Serializable{
 						
 						HexagonAdapter adapter = new HexagonAdapter(e.getX(), 
 																	e.getY(), 
-																	Integer.parseInt(dialog.getTxtR().getText().toString()),					
+																	Integer.parseInt(dialog.getTxtR().getText().toString()),
+																	false,
 																	getBorderColor(),
 																	getFillColor());
 															
@@ -683,7 +694,8 @@ public class DrawingController implements Serializable{
 		} else if (frame.getTglbtnCircle().isSelected()) {
 			
 			DlgCircle dialog = new DlgCircle();
-
+			dialog.getBtnBorderColor().setEnabled(false);
+			dialog.getBtnInnerColor().setEnabled(false);
 			dialog.getTxtX().setText("" + Integer.toString(click.getX()));
 			dialog.getTxtX().setEditable(false);
 			dialog.getTxtY().setText("" + Integer.toString(click.getY()));
@@ -695,7 +707,8 @@ public class DrawingController implements Serializable{
 		} else if (frame.getTglbtnDonut().isSelected()) {
 			
 			DlgDonut dialog = new DlgDonut();
-			
+			dialog.getBtnBorderColor().setEnabled(false);
+			dialog.getBtnInnerColor().setEnabled(false);
 			dialog.setModal(true);
 			dialog.getTxtX().setText("" + Integer.toString(click.getX()));
 			dialog.getTxtX().setEditable(false);
@@ -708,7 +721,8 @@ public class DrawingController implements Serializable{
 		} else if (frame.getTglbtnRectangle().isSelected()) {
 					
 			DlgRectangle dialog = new DlgRectangle();
-			
+			dialog.getBtnBorderColor().setEnabled(false);
+			dialog.getBtnInnerColor().setEnabled(false);
 			dialog.setModal(true);
 			dialog.getTxtUpperLeftX().setText("" + Integer.toString(me.getX()));
 			dialog.getTxtUpperLeftX().setEditable(false);
@@ -721,7 +735,8 @@ public class DrawingController implements Serializable{
 		} else if (frame.getTglbtnHexagon().isSelected()) {
 			
 			DlgHexagon dialog = new DlgHexagon();
-			
+			dialog.getBtnBorderColor().setEnabled(false);
+			dialog.getBtnInnerColor().setEnabled(false);
 			dialog.setModal(true);
 			dialog.getTxtX().setText("" + Integer.toString(me.getX()));
 			dialog.getTxtX().setEditable(false);
@@ -746,13 +761,16 @@ public class DrawingController implements Serializable{
 			model.pushToRedoStack(model.getUndoStack().peek());
 			actLog.addElement("Undo->" + model.getUndoStack().peek().toString());
 			model.removeFromUndoStack();
-			enablingButtons();
 			frame.getView().repaint(); 
 			
 			if ((model.getUndoStack().size()) == 0) {
 				frame.getBtnUndo().setEnabled(false);
+				JOptionPane.showMessageDialog(null, "There is nothing left to undo");	
 			}
-		}		
+		}	
+		frame.repaint();
+		enablingButtons();
+
 	}
 	
 	public void redo() {
@@ -765,9 +783,12 @@ public class DrawingController implements Serializable{
 			frame.getView().repaint();
 			
 			if ((model.getRedoStack().size()) == 0) {
-				frame.getBtnUndo().setEnabled(false);
+				frame.getBtnRedo().setEnabled(false);
+				JOptionPane.showMessageDialog(null, "There is nothing left to redo");	
+
 			}
-		}		
+		}
+		frame.repaint();
 	}
 	
 	public void bringToBack() {
@@ -983,6 +1004,7 @@ public class DrawingController implements Serializable{
 		Color choseColor = JColorChooser.showDialog(null, "Chose inside color", Color.BLACK);
 		frame.getBtnBorderColor().setBackground(choseColor);
 		borderColor=frame.getBtnBorderColor().getBackground();
+		
 	}
 	
 	public void fillColor() {

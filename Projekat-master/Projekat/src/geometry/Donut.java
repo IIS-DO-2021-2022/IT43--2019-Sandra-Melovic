@@ -124,7 +124,7 @@ public class Donut extends Circle implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Donut" + ":" +  getCenter().getX()+ ","+ getCenter().getY()+ "," + getR() + "," + getInnerR() + "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue()  + "," + getInnerColor().getRed() + "," + getInnerColor().getGreen() + "," + getInnerColor().getBlue();
+		return "Donut" + ":" +  getCenter().getX()+ ","+ getCenter().getY()+ "," + getR() + "," + getInnerR() + "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue()  + "," + getInnerColor().getRed() + "," + getInnerColor().getGreen() + "," + getInnerColor().getBlue()+","+isSelected();
 		//return "Donut: radius=" + getR() + "; x=" + getCenter().getX() + "; y=" + getCenter().getY() + "; edge color=" + getColor().toString().substring(14).replace('=', '-') + "; area color=" + getInnerColor().toString().substring(14).replace('=', '-') + "; inner radius=" + innerR;
 	}
 	

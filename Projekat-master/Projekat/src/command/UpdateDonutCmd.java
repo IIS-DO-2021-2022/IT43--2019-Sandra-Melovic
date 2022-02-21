@@ -42,6 +42,9 @@ public class UpdateDonutCmd implements Command {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		oldState.setColor(newState.getColor());
+		oldState.setInnerColor(newState.getInnerColor());
+
 
 	}
 
@@ -59,6 +62,14 @@ public class UpdateDonutCmd implements Command {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		oldState.setColor(original.getColor());
+		oldState.setInnerColor(original.getInnerColor());
 	}
+	
+	@Override
+	public String toString() {
+		return "Updated->" + original.toString() + "->" + newState.toString();
+	}
+
 
 }

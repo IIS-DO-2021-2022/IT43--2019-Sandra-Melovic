@@ -44,5 +44,11 @@ public class UpdateLineCmd implements Command {
 		oldState.getEndPoint().setY(original.getEndPoint().getY());
 		oldState.setColor(original.getColor());
 	}
+	
+	@Override
+	public String toString() {
+		return "Updated->" + original.toString() + "->" + newState.toString();
+	}
+
 
 }

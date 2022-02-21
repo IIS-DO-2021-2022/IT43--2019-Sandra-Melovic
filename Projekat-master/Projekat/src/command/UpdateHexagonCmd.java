@@ -2,7 +2,6 @@ package command;
 
 import adapter.HexagonAdapter;
 import geometry.Circle;
-import geometry.Hexagon;
 import geometry.Point;
 import mvc.DrawingModel;
 
@@ -38,6 +37,8 @@ public class UpdateHexagonCmd implements Command {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		oldState.getHexagon().setBorderColor(newState.getHexagon().getBorderColor());
+		oldState.getHexagon().setAreaColor(newState.getHexagon().getAreaColor());
 
 	}
 
@@ -50,7 +51,15 @@ public class UpdateHexagonCmd implements Command {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		oldState.getHexagon().setBorderColor(original.getHexagon().getBorderColor());
+		oldState.getHexagon().setAreaColor(original.getHexagon().getAreaColor());
 	}
+	
+	@Override
+	public String toString() {
+		return "Updated->" + original.toString() + "->" + newState.toString();
+	}
+
 
 
 }

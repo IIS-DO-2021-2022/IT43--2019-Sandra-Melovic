@@ -29,7 +29,7 @@ public class ToBackCmd implements Command {
 	
 	@Override
 	public String toString() {
-		return "Moved to back->" + shape.toString();
+		return "To back->" + shape.toString();
 	}
 
 }

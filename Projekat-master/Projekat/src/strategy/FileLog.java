@@ -102,6 +102,7 @@ public class FileLog implements FileChooser{
 					frame.getList().addElement(addPointCmd.toString());
 					model.pushToUndoStack(addPointCmd);
 					
+					
 				} else if (shape.equals("Line")) {
 					
 					Line l = (Line) parseShape(result2[1],shape);
@@ -143,6 +144,7 @@ public class FileLog implements FileChooser{
 					model.pushToUndoStack(addHexagonCmd);
 					
 				}
+				
 			}  else if (command.equals("Updated")) {
 				
 				String [] result3 = result[2].split(":");
@@ -202,13 +204,13 @@ public class FileLog implements FileChooser{
 				
 			} else if (command.equals("Deleted")){
 				
-				while (model.getSelectedShapes().size() != 0) {
+				//while (model.getSelectedShapes().size() != 0) {
 					Shape removeShape = parseShape(result2[1],shape);
 					RemoveShapeCmd  removeShapeCmd = new RemoveShapeCmd(model, model.getSelectedShapes().get(0));
 					frame.getList().addElement("Deleted->" + removeShape.toString());
 					removeShapeCmd.execute();
 					model.pushToUndoStack(removeShapeCmd);
-				}
+				//}
 				
 			} else if (command.equals("Selected")){
 				
@@ -230,46 +232,54 @@ public class FileLog implements FileChooser{
 						deselectedShape = model.getShapes().get(i);
 						DeselectCmd cmdDeselect = new DeselectCmd(model, deselectedShape);
 						cmdDeselect.execute();
-						frame.getList().addElement("Deelected->" + deselectedShape.toString());
+						frame.getList().addElement("Deselected->" + deselectedShape.toString());
 						model.pushToUndoStack(cmdDeselect);
 					}
 				}		
 				
 			} else if (command.equals("Bring to front")){
 				
-				Shape bringToFrontShape = parseShape(result2[1], shape);
+				int index = model.getShapes().indexOf(model.getSelectedShapes().get(0));
+				Shape bringToFrontShape = model.getShapes().get(index);
 				BringToFrontCmd bringToFrontCmd = new BringToFrontCmd(model, bringToFrontShape);
 				bringToFrontCmd.execute();
 				frame.getList().addElement("Bring to front->" + bringToFrontShape.toString());
 				model.pushToUndoStack(bringToFrontCmd);
+				frame.repaint();
 				
 			} else if (command.equals("Bring to back")){
 				
-				Shape bringToBackShape = parseShape(result2[1], shape);
+				int index = model.getShapes().indexOf(model.getSelectedShapes().get(0));
+				Shape bringToBackShape = model.getShapes().get(index);
 				BringToBackCmd bringTobackCmd = new BringToBackCmd(model, bringToBackShape, model.getIndexOf(bringToBackShape));
 				bringTobackCmd.execute();
 				frame.getList().addElement("Bring to back->" + bringToBackShape.toString());
 				model.pushToUndoStack(bringTobackCmd);
+				frame.repaint();
 							
 			} else if (command.equals("To front")){
 				
 				Shape toFrontShape = parseShape(result2[1], shape);
 				ToFrontCmd toFrontCmd = new ToFrontCmd(model, model.getIndexOf(toFrontShape), toFrontShape);
 				toFrontCmd.execute();
-				frame.getList().addElement("Bring to front->" + toFrontShape.toString());
+				frame.getList().addElement("To front->" + toFrontShape.toString());
 				model.pushToUndoStack(toFrontCmd);
+				frame.repaint();
 				
 			} else if (command.equals("To back")){
 				
 				Shape toBackShape = parseShape(result2[1], shape);
 				ToBackCmd tobackCmd = new ToBackCmd(model, model.getIndexOf(toBackShape), toBackShape);
 				tobackCmd.execute();
-				frame.getList().addElement("Bring to back->" + toBackShape.toString());
+				frame.getList().addElement("To back->" + toBackShape.toString());
 				model.pushToUndoStack(tobackCmd);
+				frame.repaint();
 				
 			} else if (command.equals("Undo")){
 				
+				
 				controller.undo();
+
 				
 			} else if (command.equals("Redo")){
 				
@@ -292,6 +302,7 @@ public class FileLog implements FileChooser{
 	
 	private Shape parseShape(String result, String shapeName)
 	{
+		boolean bool = false;
 		Shape shape=null;
 		String[] prpShape = result.split(",");
 		if(shapeName.equals("Point"))
@@ -301,8 +312,15 @@ public class FileLog implements FileChooser{
 			int r=Integer.parseInt(prpShape[2]);
 			int g= Integer.parseInt(prpShape[3]);
 			int b= Integer.parseInt(prpShape[4]);
+			String isSelected= prpShape[5];
 			
-			shape= new Point(x,y,new Color(r,g,b));
+			if (isSelected.equals("false"))
+			{
+				bool=false;
+			}
+			else bool=true;
+			
+			shape= new Point(x,y,bool,new Color(r,g,b));
 			
 		} else if (shapeName.equals("Line")) {
 			
@@ -313,8 +331,15 @@ public class FileLog implements FileChooser{
 			int r=Integer.parseInt(prpShape[4]);
 			int g= Integer.parseInt(prpShape[5]);
 			int b= Integer.parseInt(prpShape[6]);
-			
-			shape = new Line(new Point(x1,y1), new Point(x2,y2), new Color(r, g, b));
+			String isSelected= prpShape[7];
+
+			if (isSelected.equals("false"))
+			{
+				bool=false;
+			}
+			else bool=true;
+				
+			shape = new Line(new Point(x1,y1), new Point(x2,y2), bool, new Color(r, g, b));
 			
 		} else if (shapeName.equals("Rectangle")) {
 			
@@ -330,7 +355,16 @@ public class FileLog implements FileChooser{
 			int r2=Integer.parseInt(prpShape[7]);
 			int g2= Integer.parseInt(prpShape[8]);
 			int b2= Integer.parseInt(prpShape[9]);
-			shape =new Rectangle(new Point(x,y), width,height, new Color(r1, g1, b1), new Color(r2, g2, b2));
+			
+			String isSelected= prpShape[10];
+			
+			if (isSelected.equals("false"))
+			{
+				bool=false;
+			}
+			else bool=true;
+
+			shape =new Rectangle(new Point(x,y), width,height, bool, new Color(r1, g1, b1), new Color(r2, g2, b2));
 			
 		} else if (shapeName.equals("Circle")) {
 			
@@ -346,7 +380,15 @@ public class FileLog implements FileChooser{
 			int g2= Integer.parseInt(prpShape[7]);
 			int b2= Integer.parseInt(prpShape[8]);
 			
-			shape = new Circle(new Point(x,y), r, new Color(r1,g1,b1), new Color(r2, g2, b2));
+			String isSelected= prpShape[9];
+			
+			if (isSelected.equals("false"))
+			{
+				bool=false;
+			}
+			else bool=true;
+			
+			shape = new Circle(new Point(x,y), r,bool,  new Color(r1,g1,b1), new Color(r2, g2, b2));
 			
 		} else if (shapeName.equals("Donut")) {
 			
@@ -363,7 +405,15 @@ public class FileLog implements FileChooser{
 			int g2= Integer.parseInt(prpShape[8]);
 			int b2= Integer.parseInt(prpShape[9]);
 			
-			shape=  new Donut(new Point(x,y), r, inR, new Color(r1, g1, b1), new Color(r2, g2, b2));
+			String isSelected= prpShape[10];
+			
+			if (isSelected.equals("false"))
+			{
+				bool=false;
+			}
+			else bool=true;
+			
+			shape=  new Donut(new Point(x,y), r, inR, bool, new Color(r1, g1, b1), new Color(r2, g2, b2));
 			
 		} else if (shapeName.equals("Hexagon")) {
 			
@@ -379,7 +429,15 @@ public class FileLog implements FileChooser{
 			int g2= Integer.parseInt(prpShape[7]);
 			int b2= Integer.parseInt(prpShape[8]);
 			
-			shape = new HexagonAdapter(x, y, r, new Color(r1, g1, b1), new Color(r2, g2, b2));
+			String isSelected= prpShape[9];
+			
+			if (isSelected.equals("false"))
+			{
+				bool=false;
+			}
+			else bool=true;
+			
+			shape = new HexagonAdapter(x, y, r, bool, new Color(r1, g1, b1), new Color(r2, g2, b2));
 			
 		}
 		return shape;

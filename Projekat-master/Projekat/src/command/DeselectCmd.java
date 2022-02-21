@@ -1,3 +1,5 @@
+
+
 package command;
 
 import geometry.Shape;
@@ -27,6 +29,11 @@ public class DeselectCmd implements Command {
 		shape.setSelected(true);
 		model.getSelectedShapes().add(shape);
 
+	}
+	
+	@Override
+	public String toString() {
+		return "Deselected->" + shape.toString();
 	}
 
 }

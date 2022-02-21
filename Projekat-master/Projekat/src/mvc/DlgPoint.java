@@ -30,8 +30,9 @@ public class DlgPoint extends JDialog {
 	private JTextField txtY;
 	private Point p;
 	private boolean isOk;
-	private Color c; 
+	private Color borderColor; 
 	private DrawingModel model;
+	private JButton btnBorderColor;
 
 	/**
 	 * Launch the application.
@@ -62,9 +63,9 @@ public class DlgPoint extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblX = new JLabel("Coordinate X:");
@@ -101,6 +102,23 @@ public class DlgPoint extends JDialog {
 			gbc_txtY.gridy = 4;
 			contentPanel.add(txtY, gbc_txtY);
 			txtY.setColumns(10);
+		}
+		{
+			 btnBorderColor = new JButton("Color");
+			btnBorderColor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Color borderColor = JColorChooser.showDialog(null, "Choose border color", btnBorderColor.getBackground());
+					if (borderColor != null)
+						btnBorderColor.setBackground(borderColor);
+				}
+				
+			});
+			
+			GridBagConstraints gbc_btnColor = new GridBagConstraints();
+			gbc_btnColor.insets = new Insets(0, 0, 0, 5);
+			gbc_btnColor.gridx = 6;
+			gbc_btnColor.gridy = 6;
+			contentPanel.add(btnBorderColor, gbc_btnColor);
 		}
 
 		{
@@ -167,14 +185,17 @@ public class DlgPoint extends JDialog {
 	public void setP(Point p) {
 		this.p = p;
 	}
+	
+	public JButton getBtnBorderColor() {
+		return btnBorderColor;
+	}
+	
 
-	public Color getC() {
-		return c;
+	public Color getBorderColor() {
+		return btnBorderColor.getBackground();
 	}
 
-	public void setC(Color c) {
-		this.c = c;
-	}
+	
 
 
 }

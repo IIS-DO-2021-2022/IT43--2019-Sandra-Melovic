@@ -20,6 +20,15 @@ public class HexagonAdapter extends SurfaceShape{
 		this.hexagon.setBorderColor(color);
 		this.hexagon.setAreaColor(innerColor);
 	}
+	
+	public HexagonAdapter(int x, int y, int r, boolean selected, Color color, Color innerColor) {
+		this.hexagon.setX(x);
+		this.hexagon.setY(y);
+		this.hexagon.setR(r);
+		this.hexagon.setSelected(selected);
+		this.hexagon.setBorderColor(color);
+		this.hexagon.setAreaColor(innerColor);
+	}
 	@Override
 	public void moveTo(int x, int y) {
 		
@@ -69,7 +78,7 @@ public class HexagonAdapter extends SurfaceShape{
 
 	@Override
 	public String toString() {
-		return "Hexagon:" + hexagon.getX() + "," + hexagon.getY() + "," + hexagon.getR() + "," + hexagon.getBorderColor().getRed()+"," + hexagon.getBorderColor().getGreen()+","+hexagon.getBorderColor().getBlue()  + "," + hexagon.getAreaColor().getRed() + "," + hexagon.getAreaColor().getGreen() + "," + hexagon.getAreaColor().getBlue();
+		return "Hexagon:" + hexagon.getX() + "," + hexagon.getY() + "," + hexagon.getR() + "," + hexagon.getBorderColor().getRed()+"," + hexagon.getBorderColor().getGreen()+","+hexagon.getBorderColor().getBlue()  + "," + hexagon.getAreaColor().getRed() + "," + hexagon.getAreaColor().getGreen() + "," + hexagon.getAreaColor().getBlue()+","+isSelected();
 	}
 	
 	@Override

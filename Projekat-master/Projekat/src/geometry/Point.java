@@ -78,7 +78,7 @@ public class Point extends Shape implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Point" + ":" +  getX()+ ","+ getY()+ "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue();
+		return "Point" + ":" +  getX()+ ","+ getY()+ "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue()+","+isSelected();
 		//return "Point: x=" + x + "; y=" + y + "; color=" + getColor().toString().substring(14).replace('=', '-');
 	}
 	

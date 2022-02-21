@@ -35,7 +35,7 @@ public class BringToBackCmd implements Command {
 
 	@Override
 	public String toString() { 
-		return "BringToBack:" + shape.toString();
+		return "Bring to back->" + shape.toString();
 	}
 	
 

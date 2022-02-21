@@ -34,7 +34,7 @@ public class BringToFrontCmd implements Command {
 
 	@Override
 	public String toString() {
-		return "BringToFront:" + shape.toString();
+		return "Bring to front->" + shape.toString();
 	}
 
 }

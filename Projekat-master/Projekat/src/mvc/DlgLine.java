@@ -23,6 +23,7 @@ import java.awt.Insets;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JRadioButton;
 
 
 public class DlgLine extends JDialog {
@@ -34,7 +35,8 @@ public class DlgLine extends JDialog {
 	private JTextField txtEndPointY;
 	public boolean isOk;
 	public Line line;
-	private Color color = Color.BLACK;
+	private Color borderColor = Color.BLACK;
+	private JButton btnBorderColor;
 
 	/**
 	 * Launch the application.
@@ -64,10 +66,10 @@ public class DlgLine extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblStartPointX = new JLabel("Start point X:");
@@ -81,7 +83,7 @@ public class DlgLine extends JDialog {
 			JLabel lblStartPointY = new JLabel("Start point Y:");
 			GridBagConstraints gbc_lblStartPointY = new GridBagConstraints();
 			gbc_lblStartPointY.insets = new Insets(20, 70, 5, 5);
-			gbc_lblStartPointY.gridx = 5;
+			gbc_lblStartPointY.gridx = 6;
 			gbc_lblStartPointY.gridy = 1;
 			contentPanel.add(lblStartPointY, gbc_lblStartPointY);
 		}
@@ -100,7 +102,7 @@ public class DlgLine extends JDialog {
 			GridBagConstraints gbc_txtStartPointY = new GridBagConstraints();
 			gbc_txtStartPointY.insets = new Insets(0, 70, 5, 5);
 			gbc_txtStartPointY.fill = GridBagConstraints.HORIZONTAL;
-			gbc_txtStartPointY.gridx = 5;
+			gbc_txtStartPointY.gridx = 6;
 			gbc_txtStartPointY.gridy = 2;
 			contentPanel.add(txtStartPointY, gbc_txtStartPointY);
 			txtStartPointY.setColumns(10);
@@ -117,7 +119,7 @@ public class DlgLine extends JDialog {
 			JLabel lblEndPointY = new JLabel("End point Y:");
 			GridBagConstraints gbc_lblEndPointY = new GridBagConstraints();
 			gbc_lblEndPointY.insets = new Insets(20, 70, 5, 5);
-			gbc_lblEndPointY.gridx = 5;
+			gbc_lblEndPointY.gridx = 6;
 			gbc_lblEndPointY.gridy = 4;
 			contentPanel.add(lblEndPointY, gbc_lblEndPointY);
 		}
@@ -136,10 +138,26 @@ public class DlgLine extends JDialog {
 			GridBagConstraints gbc_txtEndPointY = new GridBagConstraints();
 			gbc_txtEndPointY.insets = new Insets(0, 70, 5, 5);
 			gbc_txtEndPointY.fill = GridBagConstraints.HORIZONTAL;
-			gbc_txtEndPointY.gridx = 5;
+			gbc_txtEndPointY.gridx = 6;
 			gbc_txtEndPointY.gridy = 5;
 			contentPanel.add(txtEndPointY, gbc_txtEndPointY);
 			txtEndPointY.setColumns(10);
+		}
+		{
+			btnBorderColor = new JButton("Color");
+			btnBorderColor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Color borderColor = JColorChooser.showDialog(null, "Choose border color", btnBorderColor.getBackground());
+					if (borderColor != null)
+						btnBorderColor.setBackground(borderColor);
+				
+				}
+			});
+			GridBagConstraints gbc_btnBorderColor = new GridBagConstraints();
+			gbc_btnBorderColor.insets = new Insets(0, 0, 0, 5);
+			gbc_btnBorderColor.gridx = 4;
+			gbc_btnBorderColor.gridy = 6;
+			contentPanel.add(btnBorderColor, gbc_btnBorderColor);
 		}
 
 		{
@@ -211,12 +229,12 @@ public class DlgLine extends JDialog {
 		this.txtEndPointY = txtEndPointY;
 	}
 
-	public Color getColor() {
-		return color;
+	public Color getBorderColor() {
+		return btnBorderColor.getBackground();
 	}
 
-	public void setColor(Color color) {
-		this.color = color;
+	public JButton getBtnBorderColor() {
+		return btnBorderColor;
 	}
 
 	public Line getLine() {

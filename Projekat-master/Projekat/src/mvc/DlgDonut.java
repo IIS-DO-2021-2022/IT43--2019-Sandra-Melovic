@@ -33,6 +33,11 @@ public class DlgDonut extends JDialog {
 	private JTextField txtInnerR;
 	public boolean isOk;
 	public Donut donut;
+	private Color borderColor; 
+	private Color innerColor; 
+	private JButton btnBorderColor;
+	private JButton btnInnerColor;
+
 
 	/**
 	 * Launch the application.
@@ -64,9 +69,9 @@ public class DlgDonut extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblX = new JLabel("Center coordinate X:");
@@ -106,19 +111,50 @@ public class DlgDonut extends JDialog {
 			txtY.setColumns(10);
 		}
 		{
+			 btnBorderColor = new JButton("Border color");
+			btnBorderColor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Color borderColor = JColorChooser.showDialog(null, "Choose border color", btnBorderColor.getBackground());
+					if (borderColor != null)
+						btnBorderColor.setBackground(borderColor);				
+				}
+			});
+			GridBagConstraints gbc_btnBorderColor = new GridBagConstraints();
+			gbc_btnBorderColor.insets = new Insets(0, 0, 5, 5);
+			gbc_btnBorderColor.gridx = 8;
+			gbc_btnBorderColor.gridy = 4;
+			contentPanel.add(btnBorderColor, gbc_btnBorderColor);
+		}
+		{
 			JLabel lblR = new JLabel("Radius:");
 			GridBagConstraints gbc_lblR = new GridBagConstraints();
 			gbc_lblR.insets = new Insets(20, 70, 5, 5);
 			gbc_lblR.gridx = 5;
-			gbc_lblR.gridy = 4;
+			gbc_lblR.gridy = 5;
 			contentPanel.add(lblR, gbc_lblR);
+		}
+		{
+			 btnInnerColor = new JButton("Inner color");
+			btnInnerColor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Color innerColor = JColorChooser.showDialog(null, "Choose border color", btnInnerColor.getBackground());
+					if (innerColor != null)
+						btnInnerColor.setBackground(innerColor);
+				
+				}
+			});
+			GridBagConstraints gbc_btnInnerColor = new GridBagConstraints();
+			gbc_btnInnerColor.insets = new Insets(0, 0, 5, 5);
+			gbc_btnInnerColor.gridx = 8;
+			gbc_btnInnerColor.gridy = 5;
+			contentPanel.add(btnInnerColor, gbc_btnInnerColor);
 		}
 		{
 			JLabel lblInnerR = new JLabel("Inner radius:");
 			GridBagConstraints gbc_lblInnerR = new GridBagConstraints();
 			gbc_lblInnerR.insets = new Insets(20, 70, 5, 5);
 			gbc_lblInnerR.gridx = 10;
-			gbc_lblInnerR.gridy = 4;
+			gbc_lblInnerR.gridy = 5;
 			contentPanel.add(lblInnerR, gbc_lblInnerR);
 		}
 		{
@@ -127,7 +163,7 @@ public class DlgDonut extends JDialog {
 			gbc_txtR.insets = new Insets(0, 70, 5, 5);
 			gbc_txtR.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtR.gridx = 5;
-			gbc_txtR.gridy = 5;
+			gbc_txtR.gridy = 6;
 			contentPanel.add(txtR, gbc_txtR);
 			txtR.setColumns(10);
 		}
@@ -137,7 +173,7 @@ public class DlgDonut extends JDialog {
 			gbc_txtInnerR.insets = new Insets(0, 70, 5, 5);
 			gbc_txtInnerR.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtInnerR.gridx = 10;
-			gbc_txtInnerR.gridy = 5;
+			gbc_txtInnerR.gridy = 6;
 			contentPanel.add(txtInnerR, gbc_txtInnerR);
 			txtInnerR.setColumns(10);
 		}
@@ -217,6 +253,24 @@ public class DlgDonut extends JDialog {
 
 	public void setDonut(Donut donut) {
 		this.donut = donut;
+	}
+	
+	public JButton getBtnBorderColor() {
+		return btnBorderColor;
+	}
+	
+
+	public Color getBorderColor() {
+		return btnBorderColor.getBackground();
+	}
+	
+	public JButton getBtnInnerColor() {
+		return btnInnerColor;
+	}
+	
+
+	public Color getInnerColor() {
+		return btnInnerColor.getBackground();
 	}
 
 }

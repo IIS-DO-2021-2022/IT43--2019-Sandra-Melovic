@@ -24,5 +24,10 @@ public class RemoveShapeCmd implements Command{
 	public void unexecute() {
 		model.getShapes().add(shape);
 	}
+	
+	@Override
+	public String toString() {
+		return "Deleted->" + shape.toString();
+	}
 
 }

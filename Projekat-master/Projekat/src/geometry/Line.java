@@ -72,7 +72,7 @@ public class Line extends Shape implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Line" + ":" +  getStartPoint().getX()+ ","+ getStartPoint().getY()+ "," + getEndPoint().getX() + "," + getEndPoint().getY() + "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue();
+		return "Line" + ":" +  getStartPoint().getX()+ ","+ getStartPoint().getY()+ "," + getEndPoint().getX() + "," + getEndPoint().getY() + "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue()+","+isSelected();
 		 //return "Line: start point x=" + startPoint.getX() + "; start point y=" + startPoint.getY() + "; end point x=" + endPoint.getX() + "; end point y=" + endPoint.getY() + "; color=" + getColor().toString().substring(14).replace('=', '-');
 	}
 	
@@ -109,11 +109,10 @@ public class Line extends Shape implements Serializable{
 		return endPoint;
 	}
 	
-	@Override
-	public Shape clone() {
-		Line line = new Line();
-		line.setStartPoint(this.startPoint);
-		line.setEndPoint(this.endPoint);
+	public Line clone() {
+		Line line = new Line(new Point(), new Point(), getColor());
+		//line.setStartPoint(this.startPoint);
+		//line.setEndPoint(this.endPoint);
 		line.getStartPoint().setX(this.getStartPoint().getX());
 		line.getStartPoint().setY(this.getStartPoint().getY());
 		line.getStartPoint().setColor(this.getStartPoint().getColor());

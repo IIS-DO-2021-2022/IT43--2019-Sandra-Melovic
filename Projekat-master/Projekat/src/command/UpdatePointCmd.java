@@ -34,5 +34,11 @@ public class UpdatePointCmd implements Command {
 		oldState.setY(original.getY());
 		oldState.setColor(original.getColor());
 	}
+	
+	@Override
+	public String toString() {
+		return "Updated->" + original.toString() + "->" + newState.toString();
+	}
+
 
 }

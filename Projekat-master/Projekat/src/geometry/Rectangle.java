@@ -102,7 +102,7 @@ public class Rectangle extends SurfaceShape implements Serializable{
 	@Override
 	public String toString() {
 		setInnerColor(getInnerColor());
-		return "Rectangle" + ":" +  getUpperLeft().getX()+ ","+ getUpperLeft().getY()+ "," + getWidth() + "," + getHeight() + "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue()  + "," + getInnerColor().getRed() + "," + getInnerColor().getGreen() + "," + getInnerColor().getBlue();
+		return "Rectangle" + ":" +  getUpperLeft().getX()+ ","+ getUpperLeft().getY()+ "," + getWidth() + "," + getHeight() + "," + getColor().getRed()+"," + getColor().getGreen()+","+getColor().getBlue()  + "," + getInnerColor().getRed() + "," + getInnerColor().getGreen() + "," + getInnerColor().getBlue()+","+isSelected();
 		//return "Rectangle: x=" + upperLeft.getX() + "; y=" + upperLeft.getY() + "; height=" + height + "; width=" + width + "; edge color=" + getColor().toString().substring(14).replace('=', '-') + "; area color=" + getInnerColor().toString().substring(14).replace('=', '-');
 	}
 	

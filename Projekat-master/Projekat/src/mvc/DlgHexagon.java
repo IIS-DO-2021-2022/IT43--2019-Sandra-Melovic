@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -27,6 +28,10 @@ public class DlgHexagon extends JDialog {
 	private JTextField txtR;
 	private HexagonAdapter hexagon;
 	private boolean isOk;
+	private Color borderColor; 
+	private Color innerColor; 
+	private JButton btnBorderColor;
+	private JButton btnInnerColor;
 
 	/**
 	 * Launch the application.
@@ -55,9 +60,9 @@ public class DlgHexagon extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblX = new JLabel("Coordinate X:");
@@ -96,11 +101,42 @@ public class DlgHexagon extends JDialog {
 			txtY.setColumns(10);
 		}
 		{
+			 btnBorderColor = new JButton("Border color");
+			 btnBorderColor.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Color borderColor = JColorChooser.showDialog(null, "Choose border color", btnBorderColor.getBackground());
+						if (borderColor != null)
+							btnBorderColor.setBackground(borderColor);				
+					}
+				});
+			GridBagConstraints gbc_btnBorderColor = new GridBagConstraints();
+			gbc_btnBorderColor.insets = new Insets(0, 0, 5, 5);
+			gbc_btnBorderColor.gridx = 8;
+			gbc_btnBorderColor.gridy = 4;
+			contentPanel.add(btnBorderColor, gbc_btnBorderColor);
+		}
+		{
+			 btnInnerColor = new JButton("Inner color");
+			 btnInnerColor.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Color innerColor = JColorChooser.showDialog(null, "Choose border color", btnInnerColor.getBackground());
+						if (innerColor != null)
+							btnInnerColor.setBackground(innerColor);
+					
+					}
+				});
+			 GridBagConstraints gbc_btnInnerColor = new GridBagConstraints();
+			gbc_btnInnerColor.insets = new Insets(0, 0, 5, 5);
+			gbc_btnInnerColor.gridx = 8;
+			gbc_btnInnerColor.gridy = 5;
+			contentPanel.add(btnInnerColor, gbc_btnInnerColor);
+		}
+		{
 			JLabel lblR = new JLabel("Radius:");
 			GridBagConstraints gbc_lblR = new GridBagConstraints();
 			gbc_lblR.insets = new Insets(20, 0, 5, 5);
 			gbc_lblR.gridx = 4;
-			gbc_lblR.gridy = 4;
+			gbc_lblR.gridy = 6;
 			contentPanel.add(lblR, gbc_lblR);
 		}
 		{
@@ -109,7 +145,7 @@ public class DlgHexagon extends JDialog {
 			gbc_txtR.insets = new Insets(0, 0, 0, 5);
 			gbc_txtR.fill = GridBagConstraints.HORIZONTAL;
 			gbc_txtR.gridx = 4;
-			gbc_txtR.gridy = 5;
+			gbc_txtR.gridy = 7;
 			contentPanel.add(txtR, gbc_txtR);
 			txtR.setColumns(10);
 		}
@@ -172,6 +208,24 @@ public class DlgHexagon extends JDialog {
 
 	public void setConfirm(boolean isOk) {
 		this.isOk = isOk;
+	}
+	
+	public JButton getBtnBorderColor() {
+		return btnBorderColor;
+	}
+	
+
+	public Color getBorderColor() {
+		return btnBorderColor.getBackground();
+	}
+	
+	public JButton getBtnInnerColor() {
+		return btnInnerColor;
+	}
+	
+
+	public Color getInnerColor() {
+		return btnInnerColor.getBackground();
 	}
 	
 	

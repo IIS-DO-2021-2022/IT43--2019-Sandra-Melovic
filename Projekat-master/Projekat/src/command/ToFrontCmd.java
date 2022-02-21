@@ -33,7 +33,7 @@ public class ToFrontCmd implements Command {
 	
 	@Override
 	public String toString() {
-		return "Moved to front->" + shape.toString();
+		return "To front->" + shape.toString();
 	}
 
 }

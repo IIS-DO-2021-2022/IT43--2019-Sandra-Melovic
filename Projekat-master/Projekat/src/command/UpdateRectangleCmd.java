@@ -29,6 +29,8 @@ public class UpdateRectangleCmd implements Command {
 		oldState.getUpperLeft().setY(newState.getUpperLeft().getY());
 		oldState.setHeight(newState.getHeight());
 		oldState.setWidth(newState.getWidth());
+		oldState.setColor(newState.getColor());
+		oldState.setInnerColor(newState.getInnerColor());
 
 	}
 
@@ -38,6 +40,15 @@ public class UpdateRectangleCmd implements Command {
 		oldState.getUpperLeft().setY(original.getUpperLeft().getY());
 		oldState.setHeight(original.getHeight());
 		oldState.setWidth(original.getWidth());
+		oldState.setColor(original.getColor());
+		oldState.setInnerColor(original.getInnerColor());
+
 	}
+	
+	@Override
+	public String toString() {
+		return "Updated->" + original.toString() + "->" + newState.toString();
+	}
+
 
 }
