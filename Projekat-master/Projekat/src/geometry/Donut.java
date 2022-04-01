@@ -153,8 +153,10 @@ public class Donut extends Circle implements Serializable{
 	}
 	@Override
 	public Donut clone(){
-		Donut donut = new Donut();
-		donut.setCenter(this.getCenter());
+		Donut donut = new Donut(new Point(), r, innerR, getColor(), getInnerColor());
+		donut.getCenter().setX(this.getCenter().getX()); 
+		donut.getCenter().setY(this.getCenter().getY()); 
+
 		try {
 			donut.setR(this.getR());
 		} catch (Exception e1) {

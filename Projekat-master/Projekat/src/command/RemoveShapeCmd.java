@@ -7,10 +7,12 @@ public class RemoveShapeCmd implements Command{
 	
 	private DrawingModel model;
 	private Shape shape;
+	private int index;
 	
-	public RemoveShapeCmd(DrawingModel model, Shape shape) {
+	public RemoveShapeCmd(DrawingModel model, Shape shape, int index) {
 		this.model = model;
 		this.shape = shape;
+		this.index=index;
 	}
 
 	@Override
@@ -22,7 +24,7 @@ public class RemoveShapeCmd implements Command{
 
 	@Override
 	public void unexecute() {
-		model.getShapes().add(shape);
+		model.getShapes().add(index, shape);  
 	}
 	
 	@Override

@@ -90,6 +90,7 @@ public class DrawingModel implements Serializable {
 	}
 	
 	public void pushToRedoStack(Command toBePushed) {
+		System.out.println("pushToRedoStack: " + this.getRedoStack());
 		this.redoStack.push(toBePushed);
 	
 	}

@@ -11,7 +11,7 @@ public class Circle extends SurfaceShape implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private Point center;
-	private int r;
+	protected int r;
 	
 	
 	public Circle() {
@@ -144,9 +144,11 @@ public class Circle extends SurfaceShape implements Serializable{
 		
 	}
 	
+	@Override
 	public Circle clone() {
-		Circle circle = new Circle();
-		circle.setCenter(this.getCenter());
+		Circle circle = new Circle(new Point(), r, getColor(), getInnerColor());
+		circle.getCenter().setX(this.getCenter().getX()); 
+		circle.getCenter().setY(this.getCenter().getY()); 
 		try {
 			circle.setR(this.getR());
 		} catch (Exception e) {

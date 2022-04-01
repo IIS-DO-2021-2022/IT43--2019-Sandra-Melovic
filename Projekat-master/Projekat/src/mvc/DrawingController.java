@@ -88,13 +88,16 @@ public class DrawingController implements Serializable{
 				while (model.getSelectedShapes().size() != 0) {
 					Shape shape = model.getSelectedShapes().get(0);
 					System.out.println(shape);
-					RemoveShapeCmd removeShapeCmd = new RemoveShapeCmd(model, shape);
+					RemoveShapeCmd removeShapeCmd = new RemoveShapeCmd(model, shape, model.getShapes().indexOf(shape) );
 					removeShapeCmd.execute();
 					actLog.addElement("Deleted->" + shape.toString());
 					model.getUndoStack().push(removeShapeCmd);
 					enablingButtons();
 					frame.getBtnUndo().setEnabled(true);
 					frame.getBtnRedo().setEnabled(false);
+					System.out.println("REDO" + model.getRedoStack());
+					System.out.println("REDO clear" + model.getRedoStack());
+
 				}
 			}
 		} else {
@@ -196,6 +199,7 @@ public class DrawingController implements Serializable{
 											dialog.getInnerColor());
 									actLog.addElement("Updated->" + oldState.toString() + "->" + newState.toString());
 									UpdateDonutCmd updateDonutCmd = new UpdateDonutCmd(oldState, newState);
+									System.out.println("OOO" + oldState + "OOO" + newState);
 									updateDonutCmd.execute();
 									model.pushToUndoStack(updateDonutCmd);
 									frame.repaint();								
@@ -449,7 +453,7 @@ public class DrawingController implements Serializable{
 		actLog.addElement("Added->" + p.toString());
 		frame.getBtnUndo().setEnabled(true);
 		frame.getBtnRedo().setEnabled(false);
-		
+		model.getRedoStack().clear();
 		return p;
 	
 	}
@@ -465,7 +469,7 @@ public class DrawingController implements Serializable{
 			actLog.addElement("Added->" + line.toString());
 			frame.getBtnUndo().setEnabled(true);
 			frame.getBtnRedo().setEnabled(false);
-			
+			model.getRedoStack().clear();
 			return line;
 		
 	}
@@ -499,7 +503,7 @@ public class DrawingController implements Serializable{
 										actLog.addElement("Added->" + rect.toString());
 										frame.getBtnUndo().setEnabled(true);
 										frame.getBtnRedo().setEnabled(false);
-										
+										model.getRedoStack().clear();
 										return rect;
 			
 										}
@@ -536,7 +540,7 @@ public class DrawingController implements Serializable{
 					actLog.addElement("Added->" + circle.toString());
 					frame.getBtnUndo().setEnabled(true);
 					frame.getBtnRedo().setEnabled(false);
-					
+					model.getRedoStack().clear();
 					return circle;
 					
 				}
@@ -581,7 +585,7 @@ public class DrawingController implements Serializable{
 							actLog.addElement("Added->" + donut.toString());
 							frame.getBtnUndo().setEnabled(true);
 							frame.getBtnRedo().setEnabled(false);
-							
+							model.getRedoStack().clear();
 							return donut;
 						
 							
@@ -628,7 +632,7 @@ public class DrawingController implements Serializable{
 						actLog.addElement("Added->" + adapter.toString());
 						frame.getBtnUndo().setEnabled(true);
 						frame.getBtnRedo().setEnabled(false);
-						
+						model.getRedoStack().clear();
 						return adapter;
 						
 					}
@@ -662,7 +666,8 @@ public class DrawingController implements Serializable{
 						frame.getBtnUndo().setEnabled(true);
 						frame.getBtnRedo().setEnabled(false);
 						enablingButtons();
-						model.getUndoStack().push(cmdSelect);					
+						model.getUndoStack().push(cmdSelect);
+						model.getRedoStack().clear();
 					}
 					else { 
 					    DeselectCmd cmdDeselect = new DeselectCmd(model, selectedShape);
@@ -671,7 +676,8 @@ public class DrawingController implements Serializable{
 						frame.getBtnUndo().setEnabled(true);
 						frame.getBtnRedo().setEnabled(false);
 						enablingButtons();
-						model.getUndoStack().push(cmdDeselect);						
+						model.getUndoStack().push(cmdDeselect);	
+						model.getRedoStack().clear();
 					}															
 				}				
 				frame.getView().repaint();
@@ -760,7 +766,10 @@ public class DrawingController implements Serializable{
 			
 			model.pushToRedoStack(model.getUndoStack().peek());
 			actLog.addElement("Undo->" + model.getUndoStack().peek().toString());
+			System.out.print("Undo stack before:" + model.getUndoStack());
+
 			model.removeFromUndoStack();
+			System.out.print("Undo stack after:" + model.getUndoStack());
 			frame.getView().repaint(); 
 			
 			if ((model.getUndoStack().size()) == 0) {
@@ -781,7 +790,7 @@ public class DrawingController implements Serializable{
 			model.removeFromRedoStack();
 			enablingButtons();
 			frame.getView().repaint();
-			
+			System.out.print("Redo stack:" + model.getRedoStack());
 			if ((model.getRedoStack().size()) == 0) {
 				frame.getBtnRedo().setEnabled(false);
 				JOptionPane.showMessageDialog(null, "There is nothing left to redo");	
@@ -808,6 +817,7 @@ public class DrawingController implements Serializable{
 				model.pushToUndoStack(BringToBack);
 				actLog.addElement("Bring to back->" + shape.toString());
 				BringToBack.execute();
+				model.getRedoStack().clear();
 								
 			}
 			
@@ -833,6 +843,7 @@ public class DrawingController implements Serializable{
 				model.pushToUndoStack(BringToFront);
 				actLog.addElement("Bring to front->" + shape.toString());
 				BringToFront.execute();
+				model.getRedoStack().clear();
 								
 			}
 			
@@ -858,6 +869,7 @@ public class DrawingController implements Serializable{
 				model.pushToUndoStack(toBack);
 				actLog.addElement("To back->" + shape.toString());
 				toBack.execute();
+				model.getRedoStack().clear();
 								
 			}
 			
@@ -882,7 +894,8 @@ public class DrawingController implements Serializable{
 				ToFrontCmd toFront = new ToFrontCmd(model,index, shape);
 				model.pushToUndoStack(toFront);
 				actLog.addElement("To front->" + shape.toString());
-				toFront.execute();				
+				toFront.execute();	
+				model.getRedoStack().clear();
 			}			
 		}
 		
@@ -1020,13 +1033,5 @@ public class DrawingController implements Serializable{
 	public Color getFillColor() {
 		return fillColor;
 	}
-
-
-
-
-	
-	
-	
-
 
 }

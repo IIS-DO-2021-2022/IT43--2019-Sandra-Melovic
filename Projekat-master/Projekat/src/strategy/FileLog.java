@@ -204,13 +204,13 @@ public class FileLog implements FileChooser{
 				
 			} else if (command.equals("Deleted")){
 				
-				//while (model.getSelectedShapes().size() != 0) {
+				while (model.getSelectedShapes().size() != 0) {
 					Shape removeShape = parseShape(result2[1],shape);
 					RemoveShapeCmd  removeShapeCmd = new RemoveShapeCmd(model, model.getSelectedShapes().get(0));
 					frame.getList().addElement("Deleted->" + removeShape.toString());
 					removeShapeCmd.execute();
 					model.pushToUndoStack(removeShapeCmd);
-				//}
+				}
 				
 			} else if (command.equals("Selected")){
 				
