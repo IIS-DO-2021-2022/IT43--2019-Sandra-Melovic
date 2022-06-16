@@ -206,7 +206,7 @@ public class FileLog implements FileChooser{
 				
 				while (model.getSelectedShapes().size() != 0) {
 					Shape removeShape = parseShape(result2[1],shape);
-					RemoveShapeCmd  removeShapeCmd = new RemoveShapeCmd(model, model.getSelectedShapes().get(0));
+					RemoveShapeCmd  removeShapeCmd = new RemoveShapeCmd(model, model.getSelectedShapes().get(0), 1);
 					frame.getList().addElement("Deleted->" + removeShape.toString());
 					removeShapeCmd.execute();
 					model.pushToUndoStack(removeShapeCmd);
